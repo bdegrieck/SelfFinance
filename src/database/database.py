@@ -5,19 +5,19 @@ from sqlalchemy import (
     Unicode,
     Identity,
     PrimaryKeyConstraint,
-    create_engine,
     Index,
 )
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from src.database.entrypoint import Base
 
 
-class Purchase(Base):
+class PurchaseTable(Base):
     __tablename__ = "Purchase"
     __table_args__ = (
         PrimaryKeyConstraint("ID", name="PK_Purchase_ID"),
-        Index("Category", name="IX_Purchase_Category", mssql_clustered=False),
+        Index(
+            "Category", name="IX_Purchase_Category", mssql_clustered=False, unique=True
+        ),
         Index("Date", name="IX_Purchase_Date", mssql_clustered=False),
     )
 
@@ -27,11 +27,11 @@ class Purchase(Base):
     Category = Column("Category", Unicode(20), nullable=False)
 
 
-class Category(Base):
+class CategoryTable(Base):
     __tablename__ = "Category"
     __table_args__ = (
         PrimaryKeyConstraint("ID", name="PK_Category_ID"),
-        Index("Name", name="IX_Category_Name", mssql_clustered=False),
+        Index("Name", name="IX_Category_Name", mssql_clustered=False, unique=True),
     )
 
     ID = Column("ID", Identity(start=1), nullable=False)

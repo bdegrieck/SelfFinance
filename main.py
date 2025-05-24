@@ -1,6 +1,6 @@
 import click
 
-from src.database.entrypoint import start_engine
+from src.database.entrypoint import get_engine
 
 
 @click.group()
@@ -10,7 +10,7 @@ def cli():
 
 @click.command(name="start-engine")
 def connect():
-    engine = start_engine()
+    engine = get_engine()
     with engine.connect():
         click.echo(message="Connected to database")
 
