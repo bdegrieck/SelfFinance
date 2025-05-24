@@ -12,7 +12,7 @@ class SourceDataRepository:
         self._session = session
 
     def map_domain_to_entity_category(self, category: Category):
-        return CategoryTable(name=category.name)
+        return CategoryTable(Name=category.name)
 
     def map_entity_to_domain_category(self, entity: CategoryTable):
         return Category(name=entity.Name)
@@ -20,5 +20,6 @@ class SourceDataRepository:
     def get_category_by_name(self, category_name: str):
         self._session.query(CategoryTable).where(CategoryTable.Name == category_name)
 
-    def insert_category(self, category: CategoryTable):
-        self._session.add(category)
+    def insert_category(self, category: Category):
+        entity = self.map_domain_to_entity_category(category)
+        self._session.add(entity)
