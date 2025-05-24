@@ -1,12 +1,14 @@
-from sqlalchemy import Column, DateTime, Float, Unicode, Identity, PrimaryKeyConstraint, create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, DateTime, Float, Unicode, Identity, PrimaryKeyConstraint
+from sqlalchemy.orm import declarative_base
+
+from .entrypoint import get_engine
 
 Base = declarative_base()
 
 
 class Purchase(Base):
     __tablename__ = "Purchase"
-    __tableargs__ = (PrimaryKeyConstraint("ID", name="PK_Purchase_ID"))
+    __table_args__ = (PrimaryKeyConstraint("ID", name="PK_Purchase_ID"),)
 
     ID = Column("ID", Identity(start=1), nullable=False)
     date = Column("Date", DateTime, nullable=False)
@@ -14,4 +16,5 @@ class Purchase(Base):
     PurchaseType = Column("PurchaseType", Unicode, nullable=False)
 
 
-class
+# Engine that can be imported by other modules
+engine = get_engine()
