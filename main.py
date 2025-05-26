@@ -4,7 +4,7 @@ import click
 from dotenv import load_dotenv
 from sqlalchemy import text
 
-from src.database.entrypoint import get_engine
+from src.database.entrypoint import create_test_db, create_db
 
 load_dotenv()
 POSTGRES_ROOT_PATH = os.getenv("POSTGRES_ROOT_PATH")
@@ -58,7 +58,7 @@ def cli_start_engine():
     ctx.invoke(cli_stop_postgres)
     ctx.invoke(cli_start_postgres)
 
-    engine = get_engine()
+    engine = create_db()
     try:
         with engine.connect():
             click.echo("Connected to database via SQLAlchemy engine.")

@@ -39,3 +39,16 @@ class CategoryTable(Base):
 
     ID = Column("ID", Integer, Identity(start=1), nullable=False)
     Category = Column("Category", Unicode(20), nullable=False)
+
+
+class ReportTable(Base):
+    __tablename__ = "Report"
+    __table_args__ = (
+        PrimaryKeyConstraint("ID", name="PK_Report_ID"),
+        Index("IX_Report_Date", "Category", "Date", mssql_clustered=False, unique=True)
+    )
+
+    ID = Column("ID", Integer, Identity(start=1), nullable=False)
+    Date = Column("Date", DateTime, nullable=False, unique=True)
+    Total = Column("Total", Float, nullable=False)
+    FKCategory = Column("FKCategory", Unicode(20), nullable=False)

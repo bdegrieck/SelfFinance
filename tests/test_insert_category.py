@@ -1,7 +1,7 @@
 import pytest
 
 from src.constants import Category
-from src.database.entrypoint import get_engine
+from src.database.entrypoint import create_test_db
 from src.managers.source_manager.entrypoint import create_sourcedata_service
 
 

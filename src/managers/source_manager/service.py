@@ -1,4 +1,4 @@
-from src.constants import Category
+from src.constants import Category, Purchase, Report
 from src.managers.uow.sourcedata_uow import SourceDataUnitOfWork
 
 
@@ -15,4 +15,14 @@ class SourceDataService:
     def insert_category(self, category: Category) -> None:
         with self._source_data_uow as uow:
             uow.source_data_repo.insert_category(category=category)
+            uow.commit()
+
+    def insert_purchase(self, purchase: Purchase) -> None:
+        with self._source_data_uow as uow:
+            uow.source_data_repo.insert_purchase(purchase=purchase)
+            uow.commit()
+
+    def insert_report(self, report: Report) -> None:
+        with self._source_data_uow as uow:
+            uow.source_data_repo.insert_report(report=report)
             uow.commit()
