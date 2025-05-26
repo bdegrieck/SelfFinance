@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+import datetime as dt
 from src.constants import Category, Purchase, Report
 from src.database.database import CategoryTable, PurchaseTable, ReportTable
 
@@ -41,6 +41,15 @@ class SourceDataRepository:
         )
         if record:
             return self.map_entity_to_domain_category(entity=record)
+
+    def get_report_by_name_date(self, date: dt.datetime, category: str) -> Report:
+        record = (
+            self._session.query(ReportTable)
+            .where(ReportTable.Date == date, ReportTable.FKCategory == category)
+            .first()
+        )
+        if record:
+            return self.map_entity_to_domain_report(entity=record)
 
     def insert_category(self, category: Category):
         entity = self.map_domain_to_entity_category(category=category)

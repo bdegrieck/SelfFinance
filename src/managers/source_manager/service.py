@@ -1,6 +1,6 @@
 from src.constants import Category, Purchase, Report
 from src.managers.uow.sourcedata_uow import SourceDataUnitOfWork
-
+import datetime as dt
 
 class SourceDataService:
 
@@ -11,6 +11,11 @@ class SourceDataService:
         with self._source_data_uow as uow:
             category = uow.source_data_repo.get_category_by_name(category_name=category)
         return category
+
+    def get_report_by_name_date(self, category: str, date: dt.datetime) -> Category:
+        with self._source_data_uow as uow:
+            report = uow.source_data_repo.get_report_by_name_date(category_name=category)
+        return report
 
     def insert_category(self, category: Category) -> None:
         with self._source_data_uow as uow:
