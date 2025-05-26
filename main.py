@@ -2,6 +2,7 @@ import subprocess
 import os
 import click
 from dotenv import load_dotenv
+from sqlalchemy import text
 
 from src.database.entrypoint import get_engine
 

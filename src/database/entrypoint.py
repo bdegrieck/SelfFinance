@@ -1,17 +1,21 @@
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import declarative_base
 
-Base = declarative_base()
+metadata = MetaData(schema="Sales")
+Base = declarative_base(metadata=metadata)
 load_dotenv()
 
 
 def get_engine():
     username = os.getenv("POSTGRES_USERNAME")
     password = os.getenv("POSTGRES_PASSWORD")
-    url = f"postgresql+psycopg2://{username}:{password}@localhost:5432/local"
-    engine = create_engine(url)
-    Base.metadata.create_all(bind=engine)
+    url = f"postgresql+psycopg2://{username}:{password}@localhost:5432/Finance"
+    engine = create_engine(url, echo=False)
+    with engine.begin() as conn:
+        conn.execute(text('CREATE SCHEMA IF NOT EXISTS "Sales"'))
+        Base.metadata.create_all(bind=conn)
+
     return engine

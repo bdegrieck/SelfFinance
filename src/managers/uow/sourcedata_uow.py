@@ -16,7 +16,7 @@ class SourceDataUnitOfWork:
         self.source_data_repo = SourceDataRepository(session=self._session)
         return self
 
-    def __exit__(self):
+    def __exit__(self, *args):
         self._session.close()
 
     def commit(self):
