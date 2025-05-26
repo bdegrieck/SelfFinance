@@ -1,9 +1,11 @@
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
+load_dotenv()
 
 
 def get_engine():
@@ -11,5 +13,5 @@ def get_engine():
     password = os.getenv("POSTGRES_PASSWORD")
     url = f"postgresql+psycopg2://{username}:{password}@localhost:5432/local"
     engine = create_engine(url)
-    Base.metadata.create_all()
+    Base.metadata.create_all(bind=engine)
     return engine

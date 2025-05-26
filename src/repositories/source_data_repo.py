@@ -1,5 +1,3 @@
-from unicodedata import category
-
 from sqlalchemy.orm import Session
 
 from src.constants import Category
@@ -15,11 +13,13 @@ class SourceDataRepository:
         return CategoryTable(Name=category.name)
 
     def map_entity_to_domain_category(self, entity: CategoryTable):
-        return Category(name=entity.Name)
+        return Category(category=entity.Category)
 
     def get_category_by_name(self, category_name: str):
-        self._session.query(CategoryTable).where(CategoryTable.Name == category_name)
+        self._session.query(CategoryTable).where(
+            CategoryTable.Category == category_name
+        )
 
     def insert_category(self, category: Category):
-        entity = self.map_domain_to_entity_category(category)
+        entity = self.map_domain_to_entity_category(category=category)
         self._session.add(entity)
