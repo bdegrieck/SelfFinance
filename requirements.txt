@@ -7,3 +7,4 @@ pydantic==2.11.5
 pytest==8.3.5
 python-dotenv==1.1.0
 black==25.1.0
+dash==2.16.1
