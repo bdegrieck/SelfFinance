@@ -12,9 +12,14 @@ class SourceDataService:
             category = uow.source_data_repo.get_category_by_name(category_name=category)
         return category
 
-    def get_report_by_name_date(self, category: str, date: dt.datetime) -> Category:
+    def get_report_by_name_date(self, category: str, date: dt.datetime) -> Report:
+        """Return a :class:`Report` for the given category and date if one
+        exists."""
         with self._source_data_uow as uow:
-            report = uow.source_data_repo.get_report_by_name_date(category_name=category)
+            report = uow.source_data_repo.get_report_by_name_date(
+                date=date,
+                category=category,
+            )
         return report
 
     def insert_category(self, category: Category) -> None:
