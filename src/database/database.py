@@ -5,7 +5,8 @@ from sqlalchemy import (
     Unicode,
     Identity,
     PrimaryKeyConstraint,
-    Index, Integer,
+    Index,
+    Integer,
 )
 
 from src.database.entrypoint import Base
@@ -45,17 +46,13 @@ class ReportTable(Base):
     __tablename__ = "Report"
     __table_args__ = (
         PrimaryKeyConstraint("ID", name="PK_Report_ID"),
-        # Index on the category foreign key and date. Use the actual column
-        # defined below (``FKCategory``) instead of the non-existent
-        # ``Category`` column which previously triggered a
-        # ``ConstraintColumnNotFoundError`` during table creation.
         Index(
             "IX_Report_Date",
             "FKCategory",
             "Date",
             mssql_clustered=False,
             unique=True,
-        )
+        ),
     )
 
     ID = Column("ID", Integer, Identity(start=1), nullable=False)
