@@ -1,18 +1,14 @@
-import subprocess
 import os
+import subprocess
+
 import click
 from dotenv import load_dotenv
-from sqlalchemy import text
 
-from src.database.entrypoint import create_test_db, create_db
+from src.database.entrypoint import create_db
 
 load_dotenv()
-POSTGRES_ROOT_PATH = os.getenv("POSTGRES_ROOT_PATH")
-POSTGRES_VERSION = os.getenv("POSTGRES_VERSION")
-
-ROOT_PATH = os.path.join(POSTGRES_ROOT_PATH, POSTGRES_VERSION)
-DATA_DIR = os.path.join(ROOT_PATH, "data")
-PG_CTL = os.path.join(ROOT_PATH, "bin", "pg_ctl.exe")
+PG_CTL = os.getenv("POSTGRES_ROOT_PATH_MAC")
+PG_DATA = os.getenv("POSTGRES_DATA_DIRECTORY_MAC")
 
 
 @click.group()
@@ -30,12 +26,12 @@ def cli_start_postgres():
     """
     # Stop existing instance if any (ignore errors)
     try:
-        subprocess.run([PG_CTL, "stop", "-D", DATA_DIR, "-m", "fast"], check=True)
+        subprocess.run([PG_CTL, "stop", "-D", PG_DATA, "-m", "fast"], check=True)
     except subprocess.CalledProcessError:
         pass
 
     # Start fresh
-    subprocess.run([PG_CTL, "start", "-D", DATA_DIR], check=True)
+    subprocess.run([PG_CTL, "start", "-D", PG_DATA], check=True)
     click.echo("PostgreSQL started.")
 
 
@@ -44,7 +40,7 @@ def cli_stop_postgres():
     """
     Stop the PostgreSQL service.
     """
-    subprocess.run([PG_CTL, "stop", "-D", DATA_DIR, "-m", "fast"], check=True)
+    subprocess.run([PG_CTL, "stop", "-D", PG_DATA, "-m", "fast"], check=True)
     click.echo("PostgreSQL stopped.")
 
 
@@ -55,7 +51,6 @@ def cli_start_engine():
     """
     # Start Postgres if not already
     ctx = click.get_current_context()
-    ctx.invoke(cli_stop_postgres)
     ctx.invoke(cli_start_postgres)
 
     engine = create_db()
