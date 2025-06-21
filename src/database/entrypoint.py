@@ -1,11 +1,6 @@
 import os
 
-try:  # python-dotenv may not be available in minimal test environments
-    from dotenv import load_dotenv
-except ModuleNotFoundError:  # pragma: no cover - fallback for missing optional dependency
-    def load_dotenv(*args, **kwargs):
-        """Fallback ``load_dotenv`` when python-dotenv isn't installed."""
-        return False
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import declarative_base
 
@@ -20,7 +15,7 @@ def create_test_db():
     url = f"postgresql+psycopg2://{username}:{password}@localhost:5432/Finance"
     engine = create_engine(url, echo=False)
     with engine.begin() as conn:
-        conn.execute(text('CREATE SCHEMA IF NOT EXISTS "Test"'))
+        conn.execute(text('CREATE SCHEMA IF NOT EXISTS "Sales"'))
         Base.metadata.create_all(bind=conn)
     return engine
 

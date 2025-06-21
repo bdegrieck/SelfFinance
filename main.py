@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 import click
 from dotenv import load_dotenv
@@ -35,13 +34,78 @@ def cli_start_postgres():
     click.echo("PostgreSQL started.")
 
 
+import os
+import signal
+import subprocess
+import click
+
+
 @cli.command(name="stop-postgres")
 def cli_stop_postgres():
     """
     Stop the PostgreSQL service.
     """
-    subprocess.run([PG_CTL, "stop", "-D", PG_DATA, "-m", "fast"], check=True)
-    click.echo("PostgreSQL stopped.")
+    # 1) Try pg_ctl fast shutdown
+    try:
+        subprocess.run(
+            [PG_CTL, "stop", "-D", PG_DATA, "-m", "fast"],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        click.echo("pg_ctl stop -m fast succeeded.")
+    except subprocess.CalledProcessError:
+        click.echo(
+            "pg_ctl fast shutdown failed (maybe not started with pg_ctl).",
+            err=True,
+        )
+
+    # 2) Stop the Homebrew service (if that’s how it was launched)
+    subprocess.run(
+        ["brew", "services", "stop", "postgresql@14"],
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    click.echo("brew services stop attempted.")
+
+    # 3) Kill any leftover Postgres processes referencing that data dir
+    #    (read PID from postmaster.pid if present, else grep)
+    pid_file = os.path.join(PG_DATA, "postmaster.pid")
+    pids = []
+    if os.path.exists(pid_file):
+        with open(pid_file) as f:
+            pids.append(int(f.readline().strip()))
+    else:
+        # fallback: look for any postgres process using your data dir
+        out = subprocess.run(
+            ["pgrep", "-f", PG_DATA],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        for line in out.stdout.splitlines():
+            try:
+                pids.append(int(line))
+            except ValueError:
+                pass
+
+    for pid in set(pids):
+        try:
+            os.kill(pid, signal.SIGTERM)
+            click.echo(f"Sent SIGTERM to leftover Postgres PID {pid}.")
+        except ProcessLookupError:
+            pass
+
+    # 4) Remove stale lock file
+    if os.path.isfile(pid_file):
+        try:
+            os.remove(pid_file)
+            click.echo("Removed stale postmaster.pid")
+        except OSError as e:
+            click.echo(f"Failed to remove postmaster.pid: {e}", err=True)
+
+    click.echo("PostgreSQL fully stopped.")
 
 
 @cli.command(name="start-engine")
