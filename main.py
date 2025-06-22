@@ -2,12 +2,26 @@ import os
 
 import click
 from dotenv import load_dotenv
+import os
+import signal
+import subprocess
+import click
+import platform
+
 
 from src.database.entrypoint import create_db
 
 load_dotenv()
-PG_CTL = os.getenv("POSTGRES_ROOT_PATH_MAC")
-PG_DATA = os.getenv("POSTGRES_DATA_DIRECTORY_MAC")
+
+# check if mac
+if platform.system() == "Darwin":
+    PG_CTL = os.getenv("POSTGRES_ROOT_PATH_MAC")
+    PG_DATA = os.getenv("POSTGRES_DATA_DIRECTORY_MAC")
+
+# check if windows
+elif platform.system() == "Windows":
+    PG_CTL = os.getenv("POSTGRES_ROOT_PATH")
+    PG_DATA = os.getenv("POSTGRES_DATA_DIRECTORY")
 
 
 @click.group()
@@ -34,12 +48,6 @@ def cli_start_postgres():
     click.echo("PostgreSQL started.")
 
 
-import os
-import signal
-import subprocess
-import click
-
-
 @cli.command(name="stop-postgres")
 def cli_stop_postgres():
     """
@@ -61,41 +69,66 @@ def cli_stop_postgres():
         )
 
     # 2) Stop the Homebrew service (if that’s how it was launched)
-    subprocess.run(
-        ["brew", "services", "stop", "postgresql@14"],
-        check=False,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    click.echo("brew services stop attempted.")
+    pid_file = ""
+    if platform.system() == "Darwin":
+        subprocess.run(
+            ["brew", "services", "stop", "postgresql@14"],
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        click.echo("brew services stop attempted.")
+        pid_file = os.path.join(PG_DATA, "postmaster.pid")
+    elif platform.system() == "Windows":
+        # adjust the service name if yours is different
+        subprocess.run(
+            ["net", "stop", "postgresql-x64-17"],
+            shell=True,
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        click.echo(f"windows services stop attempted.")
+        pid_file = os.path.join(PG_DATA, "postmaster.opts")
+
+    if pid_file is None:
+        raise ValueError("Error: Operating system must be windows or mac.")
 
     # 3) Kill any leftover Postgres processes referencing that data dir
-    #    (read PID from postmaster.pid if present, else grep)
-    pid_file = os.path.join(PG_DATA, "postmaster.pid")
-    pids = []
-    if os.path.exists(pid_file):
-        with open(pid_file) as f:
-            pids.append(int(f.readline().strip()))
-    else:
-        # fallback: look for any postgres process using your data dir
-        out = subprocess.run(
-            ["pgrep", "-f", PG_DATA],
-            capture_output=True,
-            text=True,
+    if platform.system() == "Windows":
+        subprocess.run(
+            ["taskkill", "/F", "/IM", "postgres.exe"],
+            shell=True,
             check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
-        for line in out.stdout.splitlines():
-            try:
-                pids.append(int(line))
-            except ValueError:
-                pass
+        click.echo("taskkill attempted on postgres.exe")
+    elif platform.system() == "Darwin":
+        pids = []
+        if os.path.exists(pid_file):
+            with open(pid_file) as f:
+                pids.append(int(f.readline().strip()))
+        else:
+            # fallback: look for any postgres process using your data dir
+            out = subprocess.run(
+                ["pgrep", "-f", PG_DATA],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            for line in out.stdout.splitlines():
+                try:
+                    pids.append(int(line))
+                except ValueError:
+                    pass
 
-    for pid in set(pids):
-        try:
-            os.kill(pid, signal.SIGTERM)
-            click.echo(f"Sent SIGTERM to leftover Postgres PID {pid}.")
-        except ProcessLookupError:
-            pass
+        for pid in set(pids):
+            try:
+                os.kill(pid, signal.SIGTERM)
+                click.echo(f"Sent SIGTERM to leftover Postgres PID {pid}.")
+            except ProcessLookupError:
+                pass
 
     # 4) Remove stale lock file
     if os.path.isfile(pid_file):

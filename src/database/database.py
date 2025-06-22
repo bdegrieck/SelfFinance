@@ -18,7 +18,7 @@ class ApartmentSpendingTable(Base):
 
     ID = Column("ID", Integer, Identity(start=1), nullable=False, unique=True)
     Date = Column("Date", DateTime, nullable=False, unique=False)
-    Item = Column("Description", Unicode(100), nullable=False, unique=False)
+    Item = Column("Item", Unicode(100), nullable=False, unique=False)
     Amount = Column("Amount", Float, nullable=False, unique=False)
     Description = Column("Description", Unicode(100), nullable=True, unique=False)
 
@@ -29,7 +29,7 @@ class CarTable(Base):
 
     ID = Column("ID", Integer, Identity(start=1), nullable=False)
     Date = Column("Date", DateTime, nullable=False, unique=False)
-    Item = Column("Description", Unicode(100), nullable=False, unique=False)
+    Item = Column("Item", Unicode(100), nullable=False, unique=False)
     Amount = Column("Amount", Float, nullable=False, unique=False)
     Description = Column("Description", Unicode(100), nullable=True, unique=False)
 
