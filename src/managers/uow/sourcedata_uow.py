@@ -2,7 +2,6 @@ from typing import Self
 
 from sqlalchemy.orm import sessionmaker
 
-from src.database.entrypoint import create_db
 from src.repositories.source_data_repo import SourceDataRepository
 
 
@@ -12,7 +11,10 @@ class SourceDataUnitOfWork:
         self._sessionfactory = sessionfactory
 
     def __enter__(self) -> Self:
-        self._session = self._sessionfactory(bind=create_db())
+        # Use the session factory provided at construction time. This
+        # allows the caller to control which engine and database schema
+        # the unit of work operates on (e.g. the test database).
+        self._session = self._sessionfactory()
         self.source_data_repo = SourceDataRepository(session=self._session)
         return self
 
