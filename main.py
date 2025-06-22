@@ -141,22 +141,5 @@ def cli_stop_postgres():
     click.echo("PostgreSQL fully stopped.")
 
 
-@cli.command(name="start-engine")
-def cli_start_engine():
-    """
-    Ensure PostgreSQL is running and then connect the SQLAlchemy engine.
-    """
-    # Start Postgres if not already
-    ctx = click.get_current_context()
-    ctx.invoke(cli_start_postgres)
-
-    engine = create_db()
-    try:
-        with engine.connect():
-            click.echo("Connected to database via SQLAlchemy engine.")
-    except Exception as e:
-        click.echo(f"Failed to connect to database: {e}", err=True)
-
-
 if __name__ == "__main__":
     cli()
