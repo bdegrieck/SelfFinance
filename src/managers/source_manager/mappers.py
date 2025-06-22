@@ -1,11 +1,17 @@
 from src.database.database import (
-    GroceriesTable,
     ApartmentSpendingTable,
     CarTable,
     ClothingTable,
     EatingOutTable,
     GiftTable,
+    GroceriesTable,
     IncomeTable,
+    InvestmentsTable,
+    InvestmentTypeTable,
+    MiscExpenseTable,
+    NetWorthTable,
+    SinkingFundTable,
+    SinkingFundTypeTable,
     SubscriptionTable,
     VenmoTable,
 )
@@ -15,154 +21,258 @@ from src.managers.source_manager.domain import (
     ClothingExpense,
     EatingOutExpense,
     GiftExpense,
+    GroceriesExpense,
     Income,
+    Investment,
+    InvestmentType,
+    MiscExpense,
+    NetWorth,
+    SinkingFund,
+    SinkingFundType,
     SubscriptionExpense,
     Venmo,
-    GroceriesExpense,
 )
 
 
 def map_entity_to_domain_apartment_spending(
-    apartment_spending_record: ApartmentSpendingTable,
+    record: ApartmentSpendingTable,
 ) -> ApartmentExpense:
     return ApartmentExpense(
-        date=apartment_spending_record.Date,
-        item=apartment_spending_record.Item,
-        amount=apartment_spending_record.Amount,
+        date=record.Date,
+        item=record.Item,
+        amount=record.Amount,
+        description=record.Description,
     )
 
 
 def map_domain_to_entity_apartment_spending(
-    apartment_spending: ApartmentExpense,
+    expense: ApartmentExpense,
 ) -> ApartmentSpendingTable:
     return ApartmentSpendingTable(
-        Date=apartment_spending.date,
-        Item=apartment_spending.item,
-        Amount=apartment_spending.amount,
+        Date=expense.date,
+        Item=expense.item,
+        Amount=expense.amount,
+        Description=expense.description,
     )
 
 
-def map_entity_to_domain_car_expense(car_expense_record: CarTable) -> CarExpense:
+def map_entity_to_domain_car_expense(record: CarTable) -> CarExpense:
     return CarExpense(
-        date=car_expense_record.Date,
-        item=car_expense_record.Item,
-        amount=car_expense_record.Amount,
+        date=record.Date,
+        item=record.Item,
+        amount=record.Amount,
+        description=record.Description,
     )
 
 
-def map_domain_to_entity_car_expense(car_expense: CarExpense) -> CarTable:
+def map_domain_to_entity_car_expense(expense: CarExpense) -> CarTable:
     return CarTable(
-        Date=car_expense.date, Item=car_expense.item, Amount=car_expense.amount
+        Date=expense.date,
+        Item=expense.item,
+        Amount=expense.amount,
+        Description=expense.description,
     )
 
 
-def map_entity_to_domain_clothing_expense(
-    clothing_expense_record: ClothingTable,
-) -> ClothingExpense:
+def map_entity_to_domain_clothing_expense(record: ClothingTable) -> ClothingExpense:
     return ClothingExpense(
-        date=clothing_expense_record.Date, amount=clothing_expense_record.Amount
+        date=record.Date,
+        amount=record.Amount,
+        description=record.Description,
     )
 
 
-def map_domain_to_entity_clothing_expense(
-    clothing_expense: ClothingExpense,
-) -> CarTable:
-    return ClothingTable(Date=clothing_expense.date, Amount=clothing_expense.amount)
+def map_domain_to_entity_clothing_expense(expense: ClothingExpense) -> ClothingTable:
+    return ClothingTable(
+        Date=expense.date,
+        Amount=expense.amount,
+        Description=expense.description,
+    )
 
 
-def map_entity_to_domain_eating_out_expense(
-    eating_out_expense_record: EatingOutTable,
-) -> EatingOutExpense:
+def map_entity_to_domain_eating_out_expense(record: EatingOutTable) -> EatingOutExpense:
     return EatingOutExpense(
-        date=eating_out_expense_record.Date,
-        place=eating_out_expense_record.Place,
-        amount=eating_out_expense_record.Amount,
+        date=record.Date,
+        place=record.Place,
+        amount=record.Amount,
+        description=record.Description,
     )
 
 
-def map_domain_to_entity_eating_out_expense(
-    eating_out_expense: EatingOutExpense,
-) -> EatingOutTable:
+def map_domain_to_entity_eating_out_expense(expense: EatingOutExpense) -> EatingOutTable:
     return EatingOutTable(
-        Date=eating_out_expense.date,
-        Place=eating_out_expense.place,
-        Amount=eating_out_expense.amount,
+        Date=expense.date,
+        Place=expense.place,
+        Amount=expense.amount,
+        Description=expense.description,
     )
 
 
-def map_entity_to_domain_gift_expense(gift_expense_record: GiftTable) -> GiftExpense:
-    return GiftExpense(date=gift_expense_record.Date, amount=gift_expense_record.Amount)
+def map_entity_to_domain_gift_expense(record: GiftTable) -> GiftExpense:
+    return GiftExpense(
+        date=record.Date,
+        amount=record.Amount,
+        description=record.Description,
+    )
 
 
-def map_domain_to_entity_gift_expense(gift_expense: GiftExpense) -> GiftTable:
-    return GiftTable(Date=gift_expense.date, Amount=gift_expense.amount)
+def map_domain_to_entity_gift_expense(expense: GiftExpense) -> GiftTable:
+    return GiftTable(
+        Date=expense.date,
+        Amount=expense.amount,
+        Description=expense.description,
+    )
 
 
-def map_entity_to_domain_groceries(
-    groceries_record: GroceriesTable,
-) -> GroceriesExpense:
+def map_entity_to_domain_groceries(record: GroceriesTable) -> GroceriesExpense:
     return GroceriesExpense(
-        date=groceries_record.Date,
-        amount=groceries_record.Amount,
-        description=groceries_record.Description,
+        date=record.Date,
+        amount=record.Amount,
+        description=record.Description,
     )
 
 
-def map_domain_to_entity_groceries(groceries: GroceriesExpense) -> GroceriesTable:
+def map_domain_to_entity_groceries(expense: GroceriesExpense) -> GroceriesTable:
     return GroceriesTable(
-        Date=groceries.date, Amount=groceries.amount, Description=groceries.description
+        Date=expense.date,
+        Amount=expense.amount,
+        Description=expense.description,
     )
 
 
-def map_entity_to_domain_income(income_record: IncomeTable) -> Income:
+def map_entity_to_domain_income(record: IncomeTable) -> Income:
     return Income(
-        date=income_record.date,
-        source=income_record.Source,
-        gross_pay=income_record.GrossPay,
-        taxes=income_record.Taxes,
+        date=record.Date,
+        source=record.Source,
+        gross_pay=record.GrossPay,
+        taxes=record.Taxes,
     )
 
 
 def map_domain_to_entity_income(income: Income) -> IncomeTable:
-    net_pay = Income.gross_pay - Income.taxes
-    return CarTable(
+    net_pay = income.gross_pay - (income.taxes or 0)
+    return IncomeTable(
         Date=income.date,
         Source=income.source,
         GrossPay=income.gross_pay,
         Taxes=income.taxes,
-        NeyPay=net_pay,
+        NetPay=net_pay,
     )
 
 
-def map_entity_to_domain_subscription_expense(
-    subscription_record: SubscriptionTable,
-) -> SubscriptionExpense:
+def map_entity_to_domain_investment(record: InvestmentsTable) -> Investment:
+    return Investment(
+        fk_investment_type=record.FKInvestmentType,
+    )
+
+
+def map_domain_to_entity_investment(investment: Investment) -> InvestmentsTable:
+    return InvestmentsTable(
+        FKInvestmentType=investment.fk_investment_type,
+    )
+
+
+def map_entity_to_domain_investment_type(record: InvestmentTypeTable) -> InvestmentType:
+    return InvestmentType(
+        investment_type=record.InvestmentType,
+    )
+
+
+def map_domain_to_entity_investment_type(investment_type: InvestmentType) -> InvestmentTypeTable:
+    return InvestmentTypeTable(
+        InvestmentType=investment_type.investment_type,
+    )
+
+
+def map_entity_to_domain_misc_expense(record: MiscExpenseTable) -> MiscExpense:
+    return MiscExpense(
+        date=record.Date,
+        amount=record.Amount,
+        description=record.Description,
+    )
+
+
+def map_domain_to_entity_misc_expense(expense: MiscExpense) -> MiscExpenseTable:
+    return MiscExpenseTable(
+        Date=expense.date,
+        Amount=expense.amount,
+        Description=expense.description,
+    )
+
+
+def map_entity_to_domain_net_worth(record: NetWorthTable) -> NetWorth:
+    return NetWorth(
+        date=record.Date,
+        net_worth=record.NetWorth,
+    )
+
+
+def map_domain_to_entity_net_worth(net_worth: NetWorth) -> NetWorthTable:
+    return NetWorthTable(
+        Date=net_worth.date,
+        NetWorth=net_worth.net_worth,
+    )
+
+
+def map_entity_to_domain_sinking_fund(record: SinkingFundTable) -> SinkingFund:
+    return SinkingFund(
+        amount=record.Amount,
+        fk_sinking_fund_type=record.FKSinkingFundType,
+        date=record.Date,
+    )
+
+
+def map_domain_to_entity_sinking_fund(fund: SinkingFund) -> SinkingFundTable:
+    return SinkingFundTable(
+        Amount=fund.amount,
+        FKSinkingFundType=fund.fk_sinking_fund_type,
+        Date=fund.date,
+    )
+
+
+def map_entity_to_domain_sinking_fund_type(record: SinkingFundTypeTable) -> SinkingFundType:
+    return SinkingFundType(
+        fund_type=record.FundType,
+        total=record.Total,
+    )
+
+
+def map_domain_to_entity_sinking_fund_type(fund_type: SinkingFundType) -> SinkingFundTypeTable:
+    return SinkingFundTypeTable(
+        FundType=fund_type.fund_type,
+        Total=fund_type.total,
+    )
+
+
+def map_entity_to_domain_subscription_expense(record: SubscriptionTable) -> SubscriptionExpense:
     return SubscriptionExpense(
-        date=subscription_record.Date,
-        item=subscription_record.Item,
-        amount=subscription_record.Amount,
+        date=record.Date,
+        item=record.Item,
+        amount=record.Amount,
+        description=record.Description,
     )
 
 
-def map_domain_to_entity_subscription_expense(
-    subscription_expense: SubscriptionExpense,
-) -> SubscriptionTable:
+def map_domain_to_entity_subscription_expense(expense: SubscriptionExpense) -> SubscriptionTable:
     return SubscriptionTable(
-        Date=subscription_expense.date,
-        Item=subscription_expense.item,
-        Amount=subscription_expense.amount,
+        Date=expense.date,
+        Item=expense.item,
+        Amount=expense.amount,
+        Description=expense.description,
     )
 
 
-def map_entity_to_domain_venmo(venmo_record: VenmoTable) -> Venmo:
+def map_entity_to_domain_venmo(record: VenmoTable) -> Venmo:
     return Venmo(
-        date=venmo_record.Date,
-        amount=venmo_record.Amount,
-        description=venmo_record.Description,
+        date=record.Date,
+        amount=record.Amount,
+        description=record.Description,
     )
 
 
 def map_domain_to_entity_venmo(venmo: Venmo) -> VenmoTable:
-    return SubscriptionTable(
-        Date=venmo.date, Amount=venmo.amount, Description=venmo.description
+    return VenmoTable(
+        Date=venmo.date,
+        Amount=venmo.amount,
+        Description=venmo.description,
     )
