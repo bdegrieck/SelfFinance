@@ -8,4 +8,10 @@ class SourceDataValidator(ABC):
     """
 
     def __init__(self, data: pd.DataFrame):
+        """
+        Initialize the validator with a DataFrame.
+
+        Args:
+            data (pd.DataFrame): Data to validate.
+        """
         self.data = data
