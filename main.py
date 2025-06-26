@@ -1,15 +1,13 @@
 import os
+import platform
+import signal
+import subprocess
 
 import click
 from dotenv import load_dotenv
-import os
-import signal
-import subprocess
-import click
-import platform
 
 
-from src.database.entrypoint import create_db
+from src.database.entrypoint import create_db, clear_database
 
 load_dotenv()
 
@@ -156,6 +154,16 @@ def cli_start_engine():
             click.echo("Connected to database via SQLAlchemy engine.")
     except Exception as e:
         click.echo(f"Failed to connect to database: {e}", err=True)
+
+
+@cli.command(name="clear-database")
+def cli_clear_database():
+    """Drop all tables from the Finance database."""
+    if click.confirm("Are you sure you want to clear the database?", default=False):
+        clear_database()
+        click.echo("Database cleared.")
+    else:
+        click.echo("Aborting database clear.")
 
 
 if __name__ == "__main__":
