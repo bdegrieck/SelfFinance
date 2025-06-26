@@ -149,5 +149,12 @@ def cli_clear_database():
         click.echo("Aborting database clear.")
 
 
+@cli.command(name="start-app")
+def cli_start_app():
+    """Start the React development server."""
+    client_dir = os.path.join(os.path.dirname(__file__), "client")
+    subprocess.run(["npm", "run", "dev"], cwd=client_dir, check=True)
+
+
 if __name__ == "__main__":
     cli()
