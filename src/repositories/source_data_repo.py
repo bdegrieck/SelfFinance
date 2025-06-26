@@ -3,21 +3,7 @@ import datetime as dt
 from sqlalchemy.orm import Session
 
 from src.database.database import (
-    ApartmentSpendingTable,
-    CarTable,
-    ClothingTable,
-    EatingOutTable,
-    GiftTable,
     GroceriesTable,
-    IncomeTable,
-    InvestmentsTable,
-    InvestmentTypeTable,
-    MiscExpenseTable,
-    NetWorthTable,
-    SinkingFundTable,
-    SinkingFundTypeTable,
-    SubscriptionTable,
-    VenmoTable,
 )
 from src.managers.source_manager.domain import (
     ApartmentExpense,
@@ -62,7 +48,7 @@ class SourceDataRepository:
         self._session = session
 
     def insert_groceries(self, groceries: GroceriesExpense) -> None:
-        groceries_record = map_domain_to_entity_groceries(groceries=groceries)
+        groceries_record = map_domain_to_entity_groceries(expense=groceries)
         self._session.add(groceries_record)
 
     def insert_apartment_expense(self, expense: ApartmentExpense) -> None:
@@ -128,5 +114,5 @@ class SourceDataRepository:
             .first()
         )
         if record:
-            groceries = map_entity_to_domain_groceries(groceries_record=record)
+            groceries = map_entity_to_domain_groceries(record=record)
             return groceries
