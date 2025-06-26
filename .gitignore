@@ -2,3 +2,6 @@
 *.iml
 *.pyc
 *.env
+# Node
+client/node_modules/
+client/dist/
