@@ -5,7 +5,15 @@ from src.managers.source_manager.entrypoint import create_sourcedata_service
 from src.managers.source_manager.service import SourceDataService
 
 
+
 def insert_expenses(expense_sheets: list[str], source_data_service: SourceDataService):
+    """
+    Read a collection of CSV files and send their contents to the service for insertion.
+
+    Args:
+        expense_sheets (list[str]): Paths to the expense CSV files.
+        source_data_service (SourceDataService): Service used to persist the data.
+    """
 
     for expense_sheet in expense_sheets:
         df = pd.read_csv(expense_sheet)

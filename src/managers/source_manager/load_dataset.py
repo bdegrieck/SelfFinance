@@ -42,6 +42,12 @@ required_sheet_names = {
 class SourceDataManager:
 
     def _validate_sheets(self, dataset_path: str):
+        """
+        Ensure the dataset directory contains exactly the required CSV sheets.
+
+        Args:
+            dataset_path (str): Directory that holds the monthly dataset.
+        """
         path = Path(dataset_path)
         present = {p.name for p in path.glob("*.csv")}
 
@@ -60,13 +66,12 @@ class SourceDataManager:
         self, dataset_path: str, dataset_month: int, dataset_year: int
     ) -> None:
         """
-        Gathers a dataset and validates it by checking if it has the correct excel sheets and if it has missing or extra
-        columns.
+        Load an Excel workbook and insert its validated contents into the database.
 
-        :param dataset_path: dataset_path for the file that to be inserted. Must be .xlsx file
-        :param dataset_month: month of the expenses you want to insert into
-        :param dataset_year: year of the expenses you want to insert
-        :return: None
+        Args:
+            dataset_path (str): Path to the ``.xlsx`` workbook.
+            dataset_month (int): Month represented by the dataset.
+            dataset_year (int): Year represented by the dataset.
         """
         path = Path(dataset_path)
         dataset_service = create_sourcedata_service()

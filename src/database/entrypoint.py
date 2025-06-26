@@ -10,6 +10,12 @@ Base = declarative_base(metadata=metadata)
 
 
 def create_db():
+    """
+    Create the production database schema and return an engine connected to it.
+
+    Returns:
+        engine (Engine): SQLAlchemy engine connected to the Finance database.
+    """
     schema = "dbo"
     username = os.getenv("POSTGRES_USERNAME")
     password = os.getenv("POSTGRES_PASSWORD")
@@ -25,6 +31,12 @@ def create_db():
 
 
 def create_test_database():
+    """
+    Build the test schema and return a database engine pointing to it.
+
+    Returns:
+        engine (Engine): SQLAlchemy engine connected to the Test database.
+    """
     schema = "test"
     username = os.getenv("POSTGRES_USERNAME")
     password = os.getenv("POSTGRES_PASSWORD")

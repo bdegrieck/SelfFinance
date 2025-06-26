@@ -8,6 +8,9 @@ from tests.service import create_test_sourcedata_service
 class TestSourceData:
 
     def test_insert_groceries(self):
+        """
+        Ensure groceries can be inserted and retrieved using the service.
+        """
         sourcedata_service = create_test_sourcedata_service()
         groceries = GroceriesExpense(
             date=dt.datetime(month=9, day=18, year=2001),
