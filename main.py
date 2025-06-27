@@ -151,9 +151,22 @@ def cli_clear_database():
 
 @cli.command(name="start-app")
 def cli_start_app():
-    """Start the React development server."""
+    """Start both the React dev server and FastAPI backend."""
     client_dir = os.path.join(os.path.dirname(__file__), "client")
-    subprocess.run(["npm", "run", "dev"], cwd=client_dir, check=True)
+
+    api_proc = subprocess.Popen([
+        "uvicorn",
+        "src.api.main:app",
+        "--reload",
+    ])
+    react_proc = subprocess.Popen(["npm", "run", "dev"], cwd=client_dir)
+
+    try:
+        react_proc.wait()
+    finally:
+        api_proc.terminate()
+        react_proc.terminate()
+        api_proc.wait(timeout=5)
 
 
 if __name__ == "__main__":
