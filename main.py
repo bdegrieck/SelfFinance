@@ -154,12 +154,14 @@ def cli_start_app():
     """Start both the React dev server and FastAPI backend."""
     client_dir = os.path.join(os.path.dirname(__file__), "client")
 
-    api_proc = subprocess.Popen([
-        "uvicorn",
-        "src.api.main:app",
-        "--reload",
-    ])
-    react_proc = subprocess.Popen(["npm", "run", "dev"], cwd=client_dir)
+    api_proc = subprocess.Popen(
+        [
+            "uvicorn",
+            "src.api.main:app",
+            "--reload",
+        ]
+    )
+    react_proc = subprocess.Popen(["npm.cmd", "run", "dev"], cwd=client_dir)
 
     try:
         react_proc.wait()
