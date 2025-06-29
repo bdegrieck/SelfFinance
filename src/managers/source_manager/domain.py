@@ -8,7 +8,6 @@ class ApartmentExpense(BaseModel):
     """Domain model for :class:`ApartmentSpendingTable`."""
 
     date: dt.datetime
-    item: str
     amount: float
     description: Optional[str] = None
 
@@ -17,7 +16,6 @@ class CarExpense(BaseModel):
     """Domain model for :class:`CarTable`."""
 
     date: dt.datetime
-    item: str
     amount: float
     description: Optional[str] = None
 
@@ -77,7 +75,6 @@ class SubscriptionExpense(BaseModel):
     """Domain model for :class:`SubscriptionTable`."""
 
     date: dt.datetime
-    item: str
     amount: float
     description: Optional[str] = None
 
