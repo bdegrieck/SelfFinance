@@ -48,7 +48,6 @@ def map_entity_to_domain_apartment_spending(
     """
     return ApartmentExpense(
         date=record.Date,
-        item=record.Item,
         amount=record.Amount,
         description=record.Description,
     )
@@ -68,7 +67,6 @@ def map_domain_to_entity_apartment_spending(
     """
     return ApartmentSpendingTable(
         Date=expense.date,
-        Item=expense.item,
         Amount=expense.amount,
         Description=expense.description,
     )
@@ -86,7 +84,6 @@ def map_entity_to_domain_car_expense(record: CarTable) -> CarExpense:
     """
     return CarExpense(
         date=record.Date,
-        item=record.Item,
         amount=record.Amount,
         description=record.Description,
     )
@@ -104,7 +101,6 @@ def map_domain_to_entity_car_expense(expense: CarExpense) -> CarTable:
     """
     return CarTable(
         Date=expense.date,
-        Item=expense.item,
         Amount=expense.amount,
         Description=expense.description,
     )
@@ -490,7 +486,6 @@ def map_entity_to_domain_subscription_expense(record: SubscriptionTable) -> Subs
     """
     return SubscriptionExpense(
         date=record.Date,
-        item=record.Item,
         amount=record.Amount,
         description=record.Description,
     )
@@ -508,7 +503,6 @@ def map_domain_to_entity_subscription_expense(expense: SubscriptionExpense) -> S
     """
     return SubscriptionTable(
         Date=expense.date,
-        Item=expense.item,
         Amount=expense.amount,
         Description=expense.description,
     )
