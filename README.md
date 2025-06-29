@@ -7,7 +7,7 @@ This repository now includes a React frontend located in the `client` folder.
 1. Install Node dependencies:
 
    ```bash
-   cd client
+   cd app
    npm install
    ```
 

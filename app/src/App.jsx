@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
+import Logo from'./logo.jsx'
 
 export default function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <div className="logo">Self Finance</div>
+        <Logo />
         <h1 className="welcome">Welcome Ben</h1>
       </header>
       <div className="button-container">

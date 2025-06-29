@@ -152,7 +152,7 @@ def cli_clear_database():
 @cli.command(name="start-app")
 def cli_start_app():
     """Start both the React dev server and FastAPI backend."""
-    client_dir = os.path.join(os.path.dirname(__file__), "client")
+    app_dir = os.path.join(os.path.dirname(__file__), "app")
 
     api_proc = subprocess.Popen(
         [
@@ -161,7 +161,7 @@ def cli_start_app():
             "--reload",
         ]
     )
-    react_proc = subprocess.Popen(["npm.cmd", "run", "dev"], cwd=client_dir)
+    react_proc = subprocess.Popen(["npm.cmd", "run", "dev"], cwd=app_dir)
 
     try:
         react_proc.wait()
