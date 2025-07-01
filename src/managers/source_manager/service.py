@@ -16,6 +16,7 @@ from src.managers.source_manager.domain import (
     SinkingFundType,
     SubscriptionExpense,
     Venmo,
+    Login,
 )
 from src.managers.uow.sourcedata_uow import SourceDataUnitOfWork
 
@@ -79,9 +80,7 @@ class SourceDataService:
 
     def insert_investment_type(self, investment_type: InvestmentType):
         with self._source_data_uow as uow:
-            uow.source_data_repo.insert_investment_type(
-                investment_type=investment_type
-            )
+            uow.source_data_repo.insert_investment_type(investment_type=investment_type)
             uow.commit()
 
     def insert_misc_expense(self, expense: MiscExpense):
@@ -127,3 +126,17 @@ class SourceDataService:
         with self._source_data_uow as uow:
             groceries = uow.source_data_repo.get_groceries_by_date(date=date)
         return groceries
+
+    def insert_login(self, login: Login) -> None:
+        """Insert a ``Login`` record into the database."""
+
+        with self._source_data_uow as uow:
+            uow.source_data_repo.insert_login(login=login)
+            uow.commit()
+
+    def get_login_by_username(self, username: str) -> Login | None:
+        """Retrieve a login by username if present."""
+
+        with self._source_data_uow as uow:
+            login = uow.source_data_repo.get_login_by_username(username=username)
+        return login

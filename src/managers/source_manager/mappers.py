@@ -14,6 +14,7 @@ from src.database.database import (
     SinkingFundTypeTable,
     SubscriptionTable,
     VenmoTable,
+    LoginTable,
 )
 from src.managers.source_manager.domain import (
     ApartmentExpense,
@@ -31,6 +32,7 @@ from src.managers.source_manager.domain import (
     SinkingFundType,
     SubscriptionExpense,
     Venmo,
+    Login,
 )
 
 
@@ -158,7 +160,9 @@ def map_entity_to_domain_eating_out_expense(record: EatingOutTable) -> EatingOut
     )
 
 
-def map_domain_to_entity_eating_out_expense(expense: EatingOutExpense) -> EatingOutTable:
+def map_domain_to_entity_eating_out_expense(
+    expense: EatingOutExpense,
+) -> EatingOutTable:
     """
     Convert a domain ``EatingOutExpense`` into an ``EatingOutTable`` row.
 
@@ -327,7 +331,9 @@ def map_entity_to_domain_investment_type(record: InvestmentTypeTable) -> Investm
     )
 
 
-def map_domain_to_entity_investment_type(investment_type: InvestmentType) -> InvestmentTypeTable:
+def map_domain_to_entity_investment_type(
+    investment_type: InvestmentType,
+) -> InvestmentTypeTable:
     """
     Convert a domain ``InvestmentType`` into an ``InvestmentTypeTable`` row.
 
@@ -442,7 +448,9 @@ def map_domain_to_entity_sinking_fund(fund: SinkingFund) -> SinkingFundTable:
     )
 
 
-def map_entity_to_domain_sinking_fund_type(record: SinkingFundTypeTable) -> SinkingFundType:
+def map_entity_to_domain_sinking_fund_type(
+    record: SinkingFundTypeTable,
+) -> SinkingFundType:
     """
     Convert a ``SinkingFundTypeTable`` row into a ``SinkingFundType`` domain model.
 
@@ -458,7 +466,9 @@ def map_entity_to_domain_sinking_fund_type(record: SinkingFundTypeTable) -> Sink
     )
 
 
-def map_domain_to_entity_sinking_fund_type(fund_type: SinkingFundType) -> SinkingFundTypeTable:
+def map_domain_to_entity_sinking_fund_type(
+    fund_type: SinkingFundType,
+) -> SinkingFundTypeTable:
     """
     Convert a ``SinkingFundType`` domain object into a ``SinkingFundTypeTable`` row.
 
@@ -474,7 +484,9 @@ def map_domain_to_entity_sinking_fund_type(fund_type: SinkingFundType) -> Sinkin
     )
 
 
-def map_entity_to_domain_subscription_expense(record: SubscriptionTable) -> SubscriptionExpense:
+def map_entity_to_domain_subscription_expense(
+    record: SubscriptionTable,
+) -> SubscriptionExpense:
     """
     Convert a ``SubscriptionTable`` row into a domain ``SubscriptionExpense``.
 
@@ -491,7 +503,9 @@ def map_entity_to_domain_subscription_expense(record: SubscriptionTable) -> Subs
     )
 
 
-def map_domain_to_entity_subscription_expense(expense: SubscriptionExpense) -> SubscriptionTable:
+def map_domain_to_entity_subscription_expense(
+    expense: SubscriptionExpense,
+) -> SubscriptionTable:
     """
     Convert a domain ``SubscriptionExpense`` into a ``SubscriptionTable`` record.
 
@@ -539,4 +553,22 @@ def map_domain_to_entity_venmo(venmo: Venmo) -> VenmoTable:
         Date=venmo.date,
         Amount=venmo.amount,
         Description=venmo.description,
+    )
+
+
+def map_entity_to_domain_login(record: LoginTable) -> Login:
+    """Convert a ``LoginTable`` row into a ``Login`` domain object."""
+
+    return Login(
+        username=record.Username,
+        password=record.Password,
+    )
+
+
+def map_domain_to_entity_login(login: Login) -> LoginTable:
+    """Convert a ``Login`` domain object into a ``LoginTable`` row."""
+
+    return LoginTable(
+        Username=login.username,
+        Password=login.password,
     )

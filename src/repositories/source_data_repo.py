@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from src.database.database import (
     GroceriesTable,
+    LoginTable,
 )
 from src.managers.source_manager.domain import (
     ApartmentExpense,
@@ -21,6 +22,7 @@ from src.managers.source_manager.domain import (
     SinkingFundType,
     SubscriptionExpense,
     Venmo,
+    Login,
 )
 from src.managers.source_manager.mappers import (
     map_domain_to_entity_apartment_spending,
@@ -38,6 +40,8 @@ from src.managers.source_manager.mappers import (
     map_domain_to_entity_sinking_fund_type,
     map_domain_to_entity_subscription_expense,
     map_domain_to_entity_venmo,
+    map_domain_to_entity_login,
+    map_entity_to_domain_login,
     map_entity_to_domain_groceries,
 )
 
@@ -221,3 +225,21 @@ class SourceDataRepository:
         if record:
             groceries = map_entity_to_domain_groceries(record=record)
             return groceries
+
+    def insert_login(self, login: Login) -> None:
+        """Insert a login record into the database."""
+
+        record = map_domain_to_entity_login(login)
+        self._session.add(record)
+
+    def get_login_by_username(self, username: str) -> Login | None:
+        """Retrieve a login by username if present."""
+
+        record = (
+            self._session.query(LoginTable)
+            .where(LoginTable.Username == username)
+            .first()
+        )
+        if record:
+            return map_entity_to_domain_login(record=record)
+        return None
