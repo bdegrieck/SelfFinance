@@ -1,26 +1,10 @@
 import React from "react";
-import logoSrc from "./assets/Logo.png";
-import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./LoginPage";
 import ForgotPassword from "./ForgotPassword";
 
 export default function App() {
   return (
-    <div className="login-page">
-      <div className="login-panel left">
-        <img className="login-logo" src={logoSrc} alt="Self Finance" />
-      </div>
-
-      <div className="login-panel right">
-        <div className="login-form">
-          <input type="text" placeholder="Username" />
-          <input type="password" placeholder="Password" />
-          <button>LOG IN</button>
-          <a href="#">Forgot Password?</a>
-        </div>
-      </div>
-    </div>
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
