@@ -1,5 +1,5 @@
 import React from "react";
-import logoSrc from "./assests/Logo.png";
+import logoSrc from "./assets/Logo.png";
 import "./App.css";
 
 export default function LoginPage() {
@@ -11,7 +11,6 @@ export default function LoginPage() {
 
       <div className="login-panel right">
         <div className="login-form">
-          <h1>Self Finance</h1>
           <input type="text" placeholder="Username" />
           <input type="password" placeholder="Password" />
           <button>LOG IN</button>
