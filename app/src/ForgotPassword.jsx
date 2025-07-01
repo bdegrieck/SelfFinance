@@ -11,6 +11,7 @@ export default function ForgotPassword() {
         <input type="email" placeholder="Email" />
         <button>Send Reset Link</button>
         <Link to="/">Back to Login</Link>
+        <Link to="/create-user">Create Account</Link>
       </div>
     </div>
   );
