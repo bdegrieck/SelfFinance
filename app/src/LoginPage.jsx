@@ -1,11 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import logoSrc from "./assets/Logo.png";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./LoginPage";
-import ForgotPassword from "./ForgotPassword";
 
-export default function App() {
+export default function LoginPage() {
   return (
     <div className="login-page">
       <div className="login-panel left">
@@ -14,18 +12,13 @@ export default function App() {
 
       <div className="login-panel right">
         <div className="login-form">
+          <h1>Self Finance</h1>
           <input type="text" placeholder="Username" />
           <input type="password" placeholder="Password" />
           <button>LOG IN</button>
-          <a href="#">Forgot Password?</a>
+          <Link to="/forgot-password">Forgot Password?</Link>
         </div>
       </div>
     </div>
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-      </Routes>
-    </Router>
   );
 }
