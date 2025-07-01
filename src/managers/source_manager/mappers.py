@@ -34,6 +34,7 @@ from src.managers.source_manager.domain import (
     Venmo,
     Login,
 )
+from src.security import hash_password
 
 
 def map_entity_to_domain_apartment_spending(
@@ -570,5 +571,5 @@ def map_domain_to_entity_login(login: Login) -> LoginTable:
 
     return LoginTable(
         Username=login.username,
-        Password=login.password,
+        Password=hash_password(login.password),
     )
