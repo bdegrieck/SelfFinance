@@ -117,3 +117,10 @@ class SinkingFundType(BaseModel):
 
     fund_type: str
     total: float
+
+
+class Login(BaseModel):
+    """Domain model for :class:`LoginTable`."""
+
+    username: str
+    password: str
