@@ -2,6 +2,7 @@ import datetime as dt
 
 from src.managers.source_manager.domain import Login
 from tests.service import create_test_sourcedata_service
+from src.security import verify_password
 
 
 class TestLogin:
@@ -12,4 +13,4 @@ class TestLogin:
         retrieved = service.get_login_by_username(username="user1")
         assert retrieved is not None
         assert retrieved.username == "user1"
-        assert retrieved.password == "pass123"
+        assert verify_password("pass123", retrieved.password)
