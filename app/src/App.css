@@ -1,31 +1,68 @@
-.app-container {
-  font-family: sans-serif;
-  text-align: center;
-  margin-top: 40px;
+/* src/LoginPage.css */
+.login-page {
+  display: flex;
+  height: 100vh;             /* full viewport height */
 }
 
-.app-header {
+.login-panel {
+  flex: 1;                   /* each takes half the width */
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  margin-bottom: 20px;
 }
 
-.logo {
-  width: 100px;
-  height: 50px;
+/* left side: white background, just logo */
+.login-panel.left {
+  background: white;
 }
 
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.login-logo {
+  max-width: 70%;
+  height: auto;
 }
 
-button {
-  padding: 10px 15px;
-  font-size: 1rem;
+/* right side: green accent color, form centered */
+.login-panel.right {
+  background: #00c843;       /* your bright green */
+}
+
+.login-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+}
+
+.login-form h1 {
+  margin-bottom: 1.5rem;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #00c843;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 0.5rem;
   cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.login-form a {
+  display: block;
+  color: #555;
+  text-decoration: none;
+  font-size: 0.9rem;
 }

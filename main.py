@@ -150,8 +150,9 @@ def cli_clear_database():
 
 
 @cli.command(name="start-app")
-def cli_start_app():
-    """Start both the React dev server and FastAPI backend."""
+@click.pass_context
+def cli_start_app(ctx):
+    ctx.invoke(cli_start_postgres)
     app_dir = os.path.join(os.path.dirname(__file__), "app")
 
     api_proc = subprocess.Popen(
