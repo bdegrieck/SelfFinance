@@ -399,6 +399,9 @@ def map_entity_to_domain_net_worth(record: NetWorthTable) -> NetWorth:
     )
 
 
+def map_domain_to_entity_new_user(new_user: CreateUser) -> User
+
+
 def map_domain_to_entity_net_worth(net_worth: NetWorth) -> NetWorthTable:
     """
     Convert a domain ``NetWorth`` into a ``NetWorthTable`` record.

@@ -10,6 +10,7 @@ from src.managers.source_manager.domain import (
     ApartmentExpense,
     CarExpense,
     ClothingExpense,
+    CreateUser,
     EatingOutExpense,
     GiftExpense,
     GroceriesExpense,
@@ -145,6 +146,16 @@ class SourceDataRepository:
             investment_type (InvestmentType): Investment type to persist.
         """
         record = map_domain_to_entity_investment_type(investment_type)
+        self._session.add(record)
+
+    def insert_new_user(self, user_info: CreateUser) -> None:
+        """
+        Insert a new user
+
+        Args:
+            user_info (CreateUser): new user info
+        """
+        record = map_domain_to_entity_new_user()
         self._session.add(record)
 
     def insert_misc_expense(self, expense: MiscExpense) -> None:

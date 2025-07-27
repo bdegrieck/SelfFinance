@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 import datetime as dt
 from src.managers.source_manager.entrypoint import create_selfFinance_service
-from src.managers.source_manager.domain import GroceriesExpense, Login
+from src.managers.source_manager.domain import CreateUser, GroceriesExpense, Login
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -20,7 +20,7 @@ def read_root():
     return {"message": "SelfFinance API"}
 
 @app.post("/create-user")
-def login():
+def login(new_user_info: CreateUser):
     """Handle user login authentication."""
     try:
         # Get the stored login record for this username
