@@ -1,7 +1,7 @@
 import datetime as dt
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ApartmentExpense(BaseModel):
@@ -136,3 +136,9 @@ class CreateUser(BaseModel):
     last_name (str): last name of teh new user
     email (str): email of the new user
     """
+
+    username: str = Field(min_length=5, max_length=25)
+    password: str = Field(min_length=5, max_length=25)
+    first_name: str = Field(min_length=2, max_length=25)
+    last_name: str = Field(min_length=2, max_length=25)
+    email: str =  Field(min_length=2, max_length=25)
