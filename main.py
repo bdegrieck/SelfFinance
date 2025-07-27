@@ -5,6 +5,7 @@ import subprocess
 
 import click
 from dotenv import load_dotenv
+import uvicorn
 
 
 from src.database.entrypoint import create_db, clear_database
@@ -174,5 +175,26 @@ def cli_start_app(ctx):
         api_proc.wait(timeout=5)
 
 
-if __name__ == "__main__":
-    cli()
+
+@cli.command(name="debug-app")
+@click.pass_context
+def cli_start_app(ctx):
+    ctx.invoke(cli_start_postgres)
+    app_dir = os.path.join(os.path.dirname(__file__), "app")
+
+    api_proc = subprocess.Popen(
+        [
+            "uvicorn",
+            "src.api.main:app",
+            "--reload",
+        ]
+    )
+    react_proc = subprocess.Popen(["npm.cmd", "run", "dev"], cwd=app_dir)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    try:
+        react_proc.wait()
+    finally:
+        api_proc.terminate()
+        react_proc.terminate()
+        api_proc.wait(timeout=5)

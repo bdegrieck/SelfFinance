@@ -20,7 +20,6 @@ from src.managers.source_manager.domain import (
 )
 from src.managers.uow.sourcedata_uow import SourceDataUnitOfWork
 
-
 class SelfFinanceService:
 
     def __init__(self, source_data_uow: SourceDataUnitOfWork):
