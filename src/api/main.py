@@ -3,14 +3,14 @@ import datetime as dt
 from src.managers.source_manager.entrypoint import create_selfFinance_service
 from src.managers.source_manager.domain import GroceriesExpense, Login
 
-app = FastAPI(debug=True)
+app = FastAPI()
 
 @app.get("/")
 def read_root():
     return {"message": "SelfFinance API"}
 
 @app.post("/create-user")
-def login(login_data: Login):
+def login():
     """Handle user login authentication."""
     try:
         # Get the stored login record for this username
