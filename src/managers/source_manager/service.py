@@ -10,13 +10,13 @@ from src.managers.source_manager.domain import (
     Income,
     Investment,
     InvestmentType,
+    Login,
     MiscExpense,
     NetWorth,
     SinkingFund,
     SinkingFundType,
     SubscriptionExpense,
     Venmo,
-    Login,
 )
 from src.managers.uow.sourcedata_uow import SourceDataUnitOfWork
 
