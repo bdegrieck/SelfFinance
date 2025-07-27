@@ -5,7 +5,7 @@ from src.managers.source_manager.service import SourceDataService
 from src.managers.uow.sourcedata_uow import SourceDataUnitOfWork
 
 
-def create_test_sourcedata_service():
+def create_test_sourcedata_service() -> SourceDataService:
     """
     Helper used by tests to construct a ``SourceDataService`` bound to the test database.
 

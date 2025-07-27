@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 import datetime as dt
 from src.managers.source_manager.entrypoint import create_sourcedata_service
-from src.managers.source_manager.domain import GroceriesExpense
+from src.managers.source_manager.domain import GroceriesExpense, Login
 
 app = FastAPI()
 service = create_sourcedata_service()
@@ -9,6 +9,31 @@ service = create_sourcedata_service()
 @app.get("/")
 def read_root():
     return {"message": "SelfFinance API"}
+
+@app.post("/login")
+def login(login_data: Login):
+    """Handle user login authentication."""
+    try:
+        # Get the stored login record for this username
+        stored_login = service.get_login_by_username(username=login_data.username)
+        
+        if not stored_login:
+            raise HTTPException(status_code=401, detail="Invalid username or password")
+        
+        # Check if password matches (assuming passwords are hashed)
+        if stored_login.password != login_data.password:  # In production, use proper password hashing
+            raise HTTPException(status_code=401, detail="Invalid username or password")
+        
+        return {
+            "status": "success",
+            "message": "Login successful",
+            "username": login_data.username
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
 
 @app.post("/groceries")
 def add_groceries(expense: GroceriesExpense):

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./App.css";
+import "../App.css";
 
 export default function ForgotPassword() {
   return (
@@ -11,7 +11,6 @@ export default function ForgotPassword() {
         <input type="email" placeholder="Email" />
         <button>Send Reset Link</button>
         <Link to="/">Back to Login</Link>
-        <Link to="/create-user">Create Account</Link>
       </div>
     </div>
   );

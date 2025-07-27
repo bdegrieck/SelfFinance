@@ -2,6 +2,10 @@
 *.iml
 *.pyc
 *.env
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
 # Node
 app/node_modules/
 app/dist/

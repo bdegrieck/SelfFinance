@@ -31,11 +31,13 @@ def cli():
 
 
 @cli.command(name="start-postgres")
-def cli_start_postgres():
+@click.pass_context
+def cli_start_postgres(ctx):
     """
     Stop any running instance, then start the PostgreSQL service.
     """
     # Stop existing instance if any (ignore errors)
+    ctx.invoke(cli_stop_postgres)
     try:
         subprocess.run([PG_CTL, "stop", "-D", PG_DATA, "-m", "fast"], check=True)
     except subprocess.CalledProcessError:
