@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
     
       {
         "name": "Start App (Click)",
@@ -25,6 +26,14 @@
         "program": "${workspaceFolder}/main.py",
         "console": "integratedTerminal",
         "args": ["stop-postgres"]
+      },
+      {
+        "name": "Debug App (Click)",
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/main.py",
+        "console": "integratedTerminal",
+        "args": ["debug-app"]
       }
     ]
   }

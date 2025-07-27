@@ -11,6 +11,48 @@ export default function CreateUser() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
 
+  const handleCreateUser = async () => {
+    if (!username || !password) {
+      setError("Please enter both username and password");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:8000/create-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+          retyped_password: retypePassword,
+          first_name: firstName,
+          last_name: lastName,
+          email: email
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login successful:", data);
+        // Here you can redirect to dashboard or store user session
+        alert("Login successful! Welcome, " + data.username);
+      } else {
+        setError(data.detail || "Login failed. Please try again.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Network error. Please check your connection.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="create-user-page">
       <div className="create-user-form">
@@ -51,7 +93,7 @@ export default function CreateUser() {
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
-        <button>Create User</button>
+        <button onClick={handleCreateUser}>Log In</button>
         <Link to="/">Back to Login</Link>
       </div>
     </div>

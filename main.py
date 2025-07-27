@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 import uvicorn
 
 
+from src.api.main import app
 from src.database.entrypoint import create_db, clear_database
 
 load_dotenv()
@@ -155,6 +156,7 @@ def cli_clear_database():
 @cli.command(name="start-app")
 @click.pass_context
 def cli_start_app(ctx):
+    ctx.invoke(cli_stop_postgres)
     ctx.invoke(cli_start_postgres)
     app_dir = os.path.join(os.path.dirname(__file__), "app")
 
@@ -179,6 +181,7 @@ def cli_start_app(ctx):
 @cli.command(name="debug-app")
 @click.pass_context
 def cli_start_app(ctx):
+    ctx.invoke(cli_stop_postgres)
     ctx.invoke(cli_start_postgres)
     app_dir = os.path.join(os.path.dirname(__file__), "app")
 
@@ -198,3 +201,7 @@ def cli_start_app(ctx):
         api_proc.terminate()
         react_proc.terminate()
         api_proc.wait(timeout=5)
+
+
+if __name__ == "__main__":
+    cli()
