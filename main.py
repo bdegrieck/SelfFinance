@@ -181,26 +181,31 @@ def cli_start_app(ctx):
 @cli.command(name="debug-app")
 @click.pass_context
 def cli_start_app(ctx):
+    # Restart Postgres as you already have
     ctx.invoke(cli_stop_postgres)
     ctx.invoke(cli_start_postgres)
-    app_dir = os.path.join(os.path.dirname(__file__), "app")
 
-    api_proc = subprocess.Popen(
-        [
-            "uvicorn",
-            "src.api.main:app",
-            "--reload",
-        ]
+    # Start React the same way
+    app_dir = os.path.join(os.path.dirname(__file__), "app")
+    react_proc = subprocess.Popen(
+        ["npm.cmd", "run", "dev"],
+        cwd=app_dir,
+        shell=False,
     )
-    react_proc = subprocess.Popen(["npm.cmd", "run", "dev"], cwd=app_dir)
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    uvicorn.run(
+        app=app,  
+        host="0.0.0.0",
+        port=8000,
+        reload=True,           
+        log_level="debug",          
+    )
 
     try:
         react_proc.wait()
     finally:
-        api_proc.terminate()
         react_proc.terminate()
-        api_proc.wait(timeout=5)
+        react_proc.wait(timeout=5)
 
 
 if __name__ == "__main__":

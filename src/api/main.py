@@ -3,7 +3,7 @@ import datetime as dt
 from src.managers.source_manager.entrypoint import create_selfFinance_service
 from src.managers.source_manager.domain import GroceriesExpense, Login
 
-app = FastAPI()
+app = FastAPI(debug=True)
 
 @app.get("/")
 def read_root():
