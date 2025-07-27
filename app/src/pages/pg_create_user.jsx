@@ -14,22 +14,22 @@ export default function CreateUser() {
   const [error, setError] = useState("");
 
   const handleCreateUser = async () => {
-    if (
-      !username ||
-      !password ||
-      !retypePassword ||
-      !firstName ||
-      !lastName ||
-      !email
-    ) {
-      setError("Please fill in all fields");
-      return;
-    }
+    // if (
+    //   !username ||
+    //   !password ||
+    //   !retypePassword ||
+    //   !firstName ||
+    //   !lastName ||
+    //   !email
+    // ) {
+    //   setError("Please fill in all fields");
+    //   return;
+    // }
 
-    if (password !== retypePassword) {
-      setError("Passwords do not match");
-      return;
-    }
+    // if (password !== retypePassword) {
+    //   setError("Passwords do not match");
+    //   return;
+    // }
 
     setIsLoading(true);
     setError("");

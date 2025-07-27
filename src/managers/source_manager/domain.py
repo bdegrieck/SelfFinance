@@ -124,3 +124,15 @@ class Login(BaseModel):
 
     username: str
     password: str
+
+
+class CreateUser(BaseModel):
+    """
+    Info for creating a user
+
+    username (str): username for the new user
+    password (str): password for the new user
+    first_name (str): first name of the new user
+    last_name (str): last name of teh new user
+    email (str): email of the new user
+    """

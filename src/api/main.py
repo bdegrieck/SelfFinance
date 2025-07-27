@@ -2,8 +2,18 @@ from fastapi import FastAPI, HTTPException
 import datetime as dt
 from src.managers.source_manager.entrypoint import create_selfFinance_service
 from src.managers.source_manager.domain import GroceriesExpense, Login
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
@@ -19,7 +29,7 @@ def login():
         return {
             "status": "success",
             "message": "Login successful",
-            "username": login_data.username
+            "username": "ben"
         }
         
     except HTTPException:
