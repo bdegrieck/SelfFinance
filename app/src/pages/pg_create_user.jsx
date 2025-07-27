@@ -17,10 +17,8 @@ export default function CreateUser() {
       return;
     }
 
-    setIsLoading(true);
-    setError("");
-
     try {
+      console.log("We hit this request")
       const response = await fetch("http://localhost:8000/create-user", {
         method: "POST",
         headers: {
