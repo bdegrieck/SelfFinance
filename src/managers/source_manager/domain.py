@@ -43,6 +43,24 @@ class ClothingExpense(BaseModel):
     description: Optional[str] = None
 
 
+class CreateUser(BaseModel):
+    """
+    Info for creating a user
+
+    username (str): username for the new user
+    password (str): password for the new user
+    first_name (str): first name of the new user
+    last_name (str): last name of teh new user
+    email (str): email of the new user
+    """
+
+    username: str = Field(min_length=5, max_length=25)
+    password: str = Field(min_length=5, max_length=25)
+    first_name: str = Field(min_length=2, max_length=25)
+    last_name: str = Field(min_length=2, max_length=25)
+    email: str = Field(min_length=2, max_length=25)
+
+
 class EatingOutExpense(BaseModel):
     """Meals or snacks purchased outside the home.
 
@@ -99,6 +117,35 @@ class Income(BaseModel):
     taxes: float
 
 
+class Investment(BaseModel):
+    """Investment holding record.
+
+    fk_investment_type (int): foreign key to the investment type
+    """
+
+    fk_investment_type: int
+
+
+class InvestmentType(BaseModel):
+    """Type of investment available.
+
+    investment_type (str): descriptive name of the investment type
+    """
+
+    investment_type: str
+
+
+class Login(BaseModel):
+    """Login for the user
+
+    username (str): username of the user
+    password (str): password of the user
+    """
+
+    username: str
+    password: str
+
+
 class Meta(BaseModel):
     """Meta information for data exports.
 
@@ -121,50 +168,6 @@ class MiscExpense(BaseModel):
     date: dt.datetime
     amount: float
     description: str
-
-
-class SubscriptionExpense(BaseModel):
-    """Recurring subscription costs.
-
-    date (datetime): date of the charge
-    amount (float): subscription amount
-    description (str, optional): notes about the subscription
-    """
-
-    date: dt.datetime
-    amount: float
-    description: Optional[str] = None
-
-
-class Venmo(BaseModel):
-    """Transactions sent or received via Venmo.
-
-    date (datetime): date of the transaction
-    amount (float): amount of money transferred
-    description (str, optional): notes about the transaction
-    """
-
-    date: dt.datetime
-    amount: float
-    description: Optional[str]
-
-
-class Investment(BaseModel):
-    """Investment holding record.
-
-    fk_investment_type (int): foreign key to the investment type
-    """
-
-    fk_investment_type: int
-
-
-class InvestmentType(BaseModel):
-    """Type of investment available.
-
-    investment_type (str): descriptive name of the investment type
-    """
-
-    investment_type: str
 
 
 class NetWorth(BaseModel):
@@ -202,30 +205,27 @@ class SinkingFundType(BaseModel):
     total: float
 
 
-class Login(BaseModel):
-    """Login for the user
+class SubscriptionExpense(BaseModel):
+    """Recurring subscription costs.
 
-    username (str): username of the user
-    password (str): password of the user
+    date (datetime): date of the charge
+    amount (float): subscription amount
+    description (str, optional): notes about the subscription
     """
 
-    username: str
-    password: str
+    date: dt.datetime
+    amount: float
+    description: Optional[str] = None
 
 
-class CreateUser(BaseModel):
-    """
-    Info for creating a user
+class Venmo(BaseModel):
+    """Transactions sent or received via Venmo.
 
-    username (str): username for the new user
-    password (str): password for the new user
-    first_name (str): first name of the new user
-    last_name (str): last name of teh new user
-    email (str): email of the new user
+    date (datetime): date of the transaction
+    amount (float): amount of money transferred
+    description (str, optional): notes about the transaction
     """
 
-    username: str = Field(min_length=5, max_length=25)
-    password: str = Field(min_length=5, max_length=25)
-    first_name: str = Field(min_length=2, max_length=25)
-    last_name: str = Field(min_length=2, max_length=25)
-    email: str =  Field(min_length=2, max_length=25)
+    date: dt.datetime
+    amount: float
+    description: Optional[str]

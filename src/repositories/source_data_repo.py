@@ -17,13 +17,13 @@ from src.managers.source_manager.domain import (
     Income,
     Investment,
     InvestmentType,
+    Login,
     MiscExpense,
     NetWorth,
     SinkingFund,
     SinkingFundType,
     SubscriptionExpense,
     Venmo,
-    Login,
 )
 from src.managers.source_manager.mappers import (
     map_domain_to_entity_apartment_spending,
