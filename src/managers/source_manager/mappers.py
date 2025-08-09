@@ -14,12 +14,13 @@ from src.database.database import (
     SinkingFundTypeTable,
     SubscriptionTable,
     VenmoTable,
-    LoginTable,
+    UserTable,
 )
 from src.managers.source_manager.domain import (
     ApartmentExpense,
     CarExpense,
     ClothingExpense,
+    User,
     EatingOutExpense,
     GiftExpense,
     GroceriesExpense,
@@ -399,7 +400,36 @@ def map_entity_to_domain_net_worth(record: NetWorthTable) -> NetWorth:
     )
 
 
-def map_domain_to_entity_new_user(new_user: CreateUser) -> User
+def map_domain_to_entity_user(user: User) -> UserTable:
+    """
+    Maps domain user to new user table.
+
+    Args:
+        user (CreateUser): domain model of a user
+    """
+    return UserTable(
+        Username=user.username,
+        Password=user.password,
+        FirstName=user.first_name,
+        LastName=user.last_name,
+        Email=user.email
+    )
+
+
+def map_entity_to_domain_user(user: User) -> UserTable:
+    """
+    Maps domain user to new user table.
+
+    Args:
+        user (CreateUser): domain model of a user
+    """
+    return UserTable(
+        Username=user.username,
+        Password=user.password,
+        FirstName=user.first_name,
+        LastName=user.last_name,
+        Email=user.email
+    )
 
 
 def map_domain_to_entity_net_worth(net_worth: NetWorth) -> NetWorthTable:
@@ -560,8 +590,8 @@ def map_domain_to_entity_venmo(venmo: Venmo) -> VenmoTable:
     )
 
 
-def map_entity_to_domain_login(record: LoginTable) -> Login:
-    """Convert a ``LoginTable`` row into a ``Login`` domain object."""
+def map_entity_to_domain_login(record: UserTable) -> Login:
+    """Convert a ``UserTable`` row into a ``Login`` domain object."""
 
     return Login(
         username=record.Username,
@@ -569,10 +599,10 @@ def map_entity_to_domain_login(record: LoginTable) -> Login:
     )
 
 
-def map_domain_to_entity_login(login: Login) -> LoginTable:
-    """Convert a ``Login`` domain object into a ``LoginTable`` row."""
+def map_domain_to_entity_login(login: Login) -> UserTable:
+    """Convert a ``Login`` domain object into a ``UserTable`` row."""
 
-    return LoginTable(
+    return UserTable(
         Username=login.username,
         Password=hash_password(login.password),
     )

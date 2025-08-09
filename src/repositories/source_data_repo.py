@@ -4,13 +4,13 @@ from sqlalchemy.orm import Session
 
 from src.database.database import (
     GroceriesTable,
-    LoginTable,
+    UserTable,
 )
 from src.managers.source_manager.domain import (
     ApartmentExpense,
     CarExpense,
     ClothingExpense,
-    CreateUser,
+    User,
     EatingOutExpense,
     GiftExpense,
     GroceriesExpense,
@@ -40,6 +40,7 @@ from src.managers.source_manager.mappers import (
     map_domain_to_entity_sinking_fund,
     map_domain_to_entity_sinking_fund_type,
     map_domain_to_entity_subscription_expense,
+    map_domain_to_entity_user,
     map_domain_to_entity_venmo,
     map_domain_to_entity_login,
     map_entity_to_domain_login,
@@ -148,7 +149,7 @@ class SourceDataRepository:
         record = map_domain_to_entity_investment_type(investment_type)
         self._session.add(record)
 
-    def insert_new_user(self, user_info: CreateUser) -> None:
+    def insert_new_user(self, user_info: User) -> None:
         """
         Insert a new user
 
@@ -237,18 +238,17 @@ class SourceDataRepository:
             groceries = map_entity_to_domain_groceries(record=record)
             return groceries
 
-    def insert_login(self, login: Login) -> None:
+    def insert_new_user(self, user_info: User) -> None:
         """Insert a login record into the database."""
-
-        record = map_domain_to_entity_login(login)
+        record = map_domain_to_entity_user(user_info)
         self._session.add(record)
 
     def get_login_by_username(self, username: str) -> Login | None:
         """Retrieve a login by username if present."""
 
         record = (
-            self._session.query(LoginTable)
-            .where(LoginTable.Username == username)
+            self._session.query(UserTable)
+            .where(UserTable.Username == username)
             .first()
         )
         if record:

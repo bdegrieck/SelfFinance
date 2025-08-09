@@ -176,10 +176,13 @@ class VenmoTable(Base):
     Description = Column("Description", Unicode(100), unique=False, nullable=True)
 
 
-class LoginTable(Base):
-    __tablename__ = "Login"
-    __table_args__ = (PrimaryKeyConstraint("ID", name="PK_Login_ID"),)
+class UserTable(Base):
+    __tablename__ = "User"
+    __table_args__ = (PrimaryKeyConstraint("ID", name="PK_User_ID"),)
 
     ID = Column("ID", Integer, Identity(start=1), nullable=False)
     Username = Column("Username", Unicode(50), nullable=False, unique=True)
     Password = Column("Password", Unicode(100), nullable=False, unique=False)
+    FirstName = Column("FirstName", Unicode(25), nullable=False, unique=False)
+    LastName = Column("LastName", Unicode(25), nullable=False, unique=False)
+    Email = Column("Email", Unicode(25), nullable=False, unique=False)

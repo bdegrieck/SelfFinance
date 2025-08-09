@@ -16,6 +16,7 @@ from src.managers.source_manager.domain import (
     SinkingFund,
     SinkingFundType,
     SubscriptionExpense,
+    User,
     Venmo,
 )
 from src.managers.uow.sourcedata_uow import SourceDataUnitOfWork
@@ -210,15 +211,15 @@ class SelfFinanceService:
             groceries = uow.source_data_repo.get_groceries_by_date(date=date)
         return groceries
 
-    def insert_login(self, login: Login) -> None:
+    def insert_new_user(self, user_info: User) -> None:
         """
-        Insert a ``Login`` record into the database.
+        Inserts a new user record into the database.
 
         Args:
-            login (Login): Login record to persist.
+            user_info (User): User information to persist.
         """
         with self._source_data_uow as uow:
-            uow.source_data_repo.insert_login(login=login)
+            uow.source_data_repo.insert_new_user(user_info=user_info)
             uow.commit()
 
     def get_login_by_username(self, username: str) -> Login | None:

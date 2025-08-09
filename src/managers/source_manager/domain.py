@@ -218,9 +218,9 @@ class SubscriptionExpense(BaseModel):
     description: Optional[str] = None
 
 
-class Venmo(BaseModel):
-    """Transactions sent or received via Venmo.
-
+class User(BaseModel):
+    """
+    Info for creating a user
     date (datetime): date of the transaction
     amount (float): amount of money transferred
     description (str, optional): notes about the transaction

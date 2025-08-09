@@ -14,28 +14,27 @@ export default function CreateUser() {
   const [error, setError] = useState("");
 
   const handleCreateUser = async () => {
-    // if (
-    //   !username ||
-    //   !password ||
-    //   !retypePassword ||
-    //   !firstName ||
-    //   !lastName ||
-    //   !email
-    // ) {
-    //   setError("Please fill in all fields");
-    //   return;
-    // }
+    if (
+      !username ||
+      !password ||
+      !retypePassword ||
+      !firstName ||
+      !lastName ||
+      !email
+    ) {
+      setError("Please fill in all fields");
+      return;
+    }
 
-    // if (password !== retypePassword) {
-    //   setError("Passwords do not match");
-    //   return;
-    // }
+    if (password !== retypePassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     setIsLoading(true);
     setError("");
 
     try {
-      console.log("We hit this request");
       const response = await fetch("http://localhost:8000/create-user", {
         method: "POST",
         headers: {
@@ -44,7 +43,6 @@ export default function CreateUser() {
         body: JSON.stringify({
           username,
           password,
-          retyped_password: retypePassword,
           first_name: firstName,
           last_name: lastName,
           email,

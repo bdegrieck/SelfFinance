@@ -5,7 +5,7 @@ from src.managers.uow.sourcedata_uow import SourceDataUnitOfWork
 from src.managers.source_manager.service import SelfFinanceService
 
 
-def create_selfFinance_service():
+def create_selfFinance_service() -> SelfFinanceService:
     """
     Construct a ``SelfFinanceService`` wired with its unit of work and database engine.
 
