@@ -23,7 +23,7 @@ from src.managers.source_manager.domain import (
     SinkingFund,
     SinkingFundType,
     SubscriptionExpense,
-    Venmo,
+    Venmo
 )
 from src.managers.source_manager.mappers import (
     map_domain_to_entity_apartment_spending,
@@ -42,9 +42,9 @@ from src.managers.source_manager.mappers import (
     map_domain_to_entity_subscription_expense,
     map_domain_to_entity_user,
     map_domain_to_entity_venmo,
-    map_domain_to_entity_login,
     map_entity_to_domain_login,
     map_entity_to_domain_groceries,
+    map_entity_to_domain_user,
 )
 
 
@@ -243,7 +243,7 @@ class SourceDataRepository:
         record = map_domain_to_entity_user(user_info)
         self._session.add(record)
 
-    def get_login_by_username(self, username: str) -> Login | None:
+    def get_login_by_username(self, username: str) -> User | None:
         """Retrieve a login by username if present."""
 
         record = (
@@ -252,5 +252,5 @@ class SourceDataRepository:
             .first()
         )
         if record:
-            return map_entity_to_domain_login(record=record)
+            return map_entity_to_domain_user(record=record)
         return None

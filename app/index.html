@@ -4,6 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Self Finance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'self-finance-green': '#00ff88',
+              'self-finance-dark-green': '#00c843',
+              'self-finance-darker-green': '#00a036',
+            },
+            fontFamily: {
+              'primary': 'sans-serif',
+            },
+            fontWeight: {
+              'normal': '400',
+              'medium': '500',
+              'semibold': '600',
+              'bold': '700',
+            }
+          }
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

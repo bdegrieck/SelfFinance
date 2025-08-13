@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException
 import datetime as dt
+from src.api.constants import HttpStatus
 from src.managers.source_manager.entrypoint import create_selfFinance_service
-from src.managers.source_manager.domain import User, GroceriesExpense, Login
+from src.managers.source_manager.domain import User, GroceriesExpense, Login, CreateUser
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -20,7 +21,7 @@ def read_root():
     return {"message": "SelfFinance API"}
 
 @app.post("/create-user")
-def UserResourcePost(new_user_info: User):
+def UserResourcePost(new_user_info: CreateUser):
     """Handle user login authentication."""
     try:
         # Get the stored login record for this username
@@ -30,7 +31,8 @@ def UserResourcePost(new_user_info: User):
         return {
             "status": "success",
             "data": None,
-            "message": "Login successful",
+            "message": "User created successfully",
+            "status_code": HttpStatus.created
         }
         
     except HTTPException:
@@ -40,26 +42,32 @@ def UserResourcePost(new_user_info: User):
 
 
 
-app.post("/login")
+@app.post("/login-user")
 def UserResourcePost(login_info: Login):
     """Handle user login authentication."""
     finance_service = create_selfFinance_service()
-    login_user_info = finance_service.get_login_by_username(username=login_info.username)
+    login_user_info: User = finance_service.get_login_by_username(username=login_info.username)
 
     if login_user_info is None:
         raise HTTPException(
-            status_code=404,
-            detail=f"No user found for username: {login_info.username}."
+            status_code=HttpStatus.not_found,
+            detail=f"User not found for: {login_info.username}."
         )
 
     if login_user_info.password != login_info.password:
         raise HTTPException(
-            status_code=401,
-            detail=f"Could not authenticate user {login_info.username} with invalid password."
+            status_code=HttpStatus.unauthorized,
+            detail=f"Could not authenticate user: {login_info.username} with invalid password."
         )
 
     return {
         "status": "success",
-        "data": None,
+        "data": {
+            "username": login_user_info.username,
+            # Add other safe user fields here if needed
+            # "email": login_user_info.email,
+            "first_name": login_user_info.first_name,
+        },
         "message": "Login successful",
+        "status_code": HttpStatus.ok
     }

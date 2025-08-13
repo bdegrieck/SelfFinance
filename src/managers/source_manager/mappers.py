@@ -416,19 +416,19 @@ def map_domain_to_entity_user(user: User) -> UserTable:
     )
 
 
-def map_entity_to_domain_user(user: User) -> UserTable:
+def map_entity_to_domain_user(record: UserTable) -> UserTable:
     """
-    Maps domain user to new user table.
+    Maps user from table to domain object
 
     Args:
-        user (CreateUser): domain model of a user
+        record (UserTable): Entity object of the user
     """
-    return UserTable(
-        Username=user.username,
-        Password=user.password,
-        FirstName=user.first_name,
-        LastName=user.last_name,
-        Email=user.email
+    return User(
+        username=record.Username,
+        password=record.Password,
+        first_name=record.FirstName,
+        last_name=record.LastName,
+        email=record.Email
     )
 
 

@@ -221,11 +221,30 @@ class SubscriptionExpense(BaseModel):
 class User(BaseModel):
     """
     Info for creating a user
-    date (datetime): date of the transaction
-    amount (float): amount of money transferred
-    description (str, optional): notes about the transaction
+
+    username (str): username of the user
+    password (str): password of the user
+    first_name (str): first name of the user
+    last_name (str): last name of the user
+    email (str): email of the user
     """
 
+    username: str
+    password: str
+    first_name: str
+    last_name: str
+    email: str
+
+
+class Venmo(BaseModel):
+    """
+    Venmo records
+
+    date (datetime): date of the venmo transaction
+    amount (float): Amount of the venmo transaction
+    description (str): Description of the record
+
+    """
     date: dt.datetime
     amount: float
-    description: Optional[str]
+    description: str

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "../App.css";
-
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export default function CreateUser() {
   const [username, setUsername] = useState("");
@@ -12,6 +10,7 @@ export default function CreateUser() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleCreateUser = async () => {
     if (
@@ -52,7 +51,7 @@ export default function CreateUser() {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Account created! Please log in.");
+        navigate("/")
       } else {
         setError(data.detail || "Account creation failed. Please try again.");
       }
@@ -65,11 +64,11 @@ export default function CreateUser() {
   };
 
   return (
-    <div className="create-user-page">
-      <div className="create-user-form">
-        <h1>Create Account</h1>
+    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-self-finance-green to-self-finance-dark-green font-primary">
+      <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center font-primary">
+        <h1 className="text-gray-800 mb-6 text-3xl font-semibold">Create Account</h1>
         {error && (
-          <div style={{ color: "red", marginBottom: "1rem" }}>{error}</div>
+          <div className="text-red-500 mb-4">{error}</div>
         )}
         <input
           type="text"
@@ -77,6 +76,7 @@ export default function CreateUser() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           disabled={isLoading}
+          className="w-full p-4 mb-6 border-2 border-gray-200 rounded-xl font-normal text-base transition-all duration-300 focus:border-self-finance-green focus:shadow-lg focus:shadow-self-finance-green/10 box-border disabled:opacity-50"
         />
         <input
           type="password"
@@ -84,6 +84,7 @@ export default function CreateUser() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={isLoading}
+          className="w-full p-4 mb-6 border-2 border-gray-200 rounded-xl font-normal text-base transition-all duration-300 focus:border-self-finance-green focus:shadow-lg focus:shadow-self-finance-green/10 box-border disabled:opacity-50"
         />
         <input
           type="password"
@@ -91,6 +92,7 @@ export default function CreateUser() {
           value={retypePassword}
           onChange={(e) => setRetypePassword(e.target.value)}
           disabled={isLoading}
+          className="w-full p-4 mb-6 border-2 border-gray-200 rounded-xl font-normal text-base transition-all duration-300 focus:border-self-finance-green focus:shadow-lg focus:shadow-self-finance-green/10 box-border disabled:opacity-50"
         />
         <input
           type="text"
@@ -98,6 +100,7 @@ export default function CreateUser() {
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           disabled={isLoading}
+          className="w-full p-4 mb-6 border-2 border-gray-200 rounded-xl font-normal text-base transition-all duration-300 focus:border-self-finance-green focus:shadow-lg focus:shadow-self-finance-green/10 box-border disabled:opacity-50"
         />
         <input
           type="text"
@@ -105,6 +108,7 @@ export default function CreateUser() {
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           disabled={isLoading}
+          className="w-full p-4 mb-6 border-2 border-gray-200 rounded-xl font-normal text-base transition-all duration-300 focus:border-self-finance-green focus:shadow-lg focus:shadow-self-finance-green/10 box-border disabled:opacity-50"
         />
         <input
           type="email"
@@ -112,11 +116,18 @@ export default function CreateUser() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={isLoading}
+          className="w-full p-4 mb-6 border-2 border-gray-200 rounded-xl font-normal text-base transition-all duration-300 focus:border-self-finance-green focus:shadow-lg focus:shadow-self-finance-green/10 box-border disabled:opacity-50"
         />
-        <button onClick={handleCreateUser} disabled={isLoading}>
+        <button 
+          onClick={handleCreateUser} 
+          disabled={isLoading}
+          className="w-full p-4 bg-self-finance-green text-white border-none font-semibold text-base rounded-xl cursor-pointer mb-6 transition-all duration-300 hover:bg-self-finance-dark-green hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+        >
           {isLoading ? "CREATING..." : "CREATE ACCOUNT"}
         </button>
-        <Link to="/">Back to Login</Link>
+        <Link to="/" className="block text-self-finance-green no-underline font-medium text-sm mt-2 transition-colors duration-300 hover:text-self-finance-darker-green hover:underline">
+          Back to Login
+        </Link>
       </div>
     </div>
   );
