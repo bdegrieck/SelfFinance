@@ -57,6 +57,10 @@ class MiscDataFrame(pa.DataFrameModel):
     Amount: str = Field(nullable=False)
 
 
+class MonthlyExpensesDataFrame(pa.DataFrameModel):
+    Date: dt.datetime = Field(nullable=False)
+    Amount: float = Field(nullable=False)
+
 class SubscriptionsDataFrame(pa.DataFrameModel):
     Date: dt.datetime = Field(nullable=False)
     Item: str = Field(nullable=False)

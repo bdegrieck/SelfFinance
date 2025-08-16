@@ -71,3 +71,11 @@ def UserResourcePost(login_info: Login):
         "message": "Login successful",
         "status_code": HttpStatus.ok
     }
+
+
+@app.get("/get-monthly-expenses")
+def get_monthly_expenses(date: dt.datetime):
+    finance_service = create_selfFinance_service()
+    monthly_expenses = finance_service.get_monthly_expenses(date)
+    return monthly_expenses
+

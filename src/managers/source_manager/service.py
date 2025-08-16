@@ -235,3 +235,18 @@ class SelfFinanceService:
         with self._source_data_uow as uow:
             login = uow.source_data_repo.get_login_by_username(username=username)
         return login
+
+
+    def get_monthly_expenses(self, date: dt.datetime) -> MonthlyExpenses:
+        """
+        Retrieve monthly expenses for the specified date from the repository.
+
+        Args:
+            date (datetime): Date of the monthly expenses.
+
+        Returns:
+            monthly_expenses (MonthlyExpenses): Retrieved monthly expenses record.
+        """
+        with self._source_data_uow as uow:
+            monthly_expenses = uow.source_data_repo.get_monthly_expenses(date=date)
+        return monthly_expenses

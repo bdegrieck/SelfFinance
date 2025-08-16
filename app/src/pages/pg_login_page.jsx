@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logoSrc from "../assets/img_logo.png";
+import logoSrc from "../assets/images/img_logo.png";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");

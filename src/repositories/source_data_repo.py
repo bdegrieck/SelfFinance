@@ -238,6 +238,24 @@ class SourceDataRepository:
             groceries = map_entity_to_domain_groceries(record=record)
             return groceries
 
+    def get_monthly_expenses(self, date: dt.datetime) -> MonthlyExpenses:
+        """
+        Fetch monthly expenses for a specific date.
+
+        Args:
+            date (datetime): Date to query.
+
+        Returns:
+            monthly_expenses (MonthlyExpenses | None): Retrieved monthly expenses if present.
+        """
+        record = (
+            self._session.query(MonthlyExpensesTable)
+            .where(MonthlyExpensesTable.Date == date)
+            .first()
+        )
+        if record:
+            return map_entity_to_domain_monthly_expenses(record=record)
+
     def insert_new_user(self, user_info: User) -> None:
         """Insert a login record into the database."""
         record = map_domain_to_entity_user(user_info)
