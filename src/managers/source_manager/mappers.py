@@ -1,608 +1,336 @@
 from src.database.database import (
-    ApartmentSpendingTable,
-    CarTable,
-    ClothingTable,
-    EatingOutTable,
-    GiftTable,
-    GroceriesTable,
-    IncomeTable,
-    InvestmentsTable,
-    InvestmentTypeTable,
-    MiscExpenseTable,
-    NetWorthTable,
-    SinkingFundTable,
-    SinkingFundTypeTable,
-    SubscriptionTable,
-    VenmoTable,
-    UserTable,
-)
-from src.managers.source_manager.domain import (
-    ApartmentExpense,
-    CarExpense,
-    ClothingExpense,
     User,
-    EatingOutExpense,
-    GiftExpense,
-    GroceriesExpense,
+    Expense,
+    Category,
     Income,
     Investment,
     InvestmentType,
-    Login,
-    MiscExpense,
-    NetWorth,
     SinkingFund,
     SinkingFundType,
-    SubscriptionExpense,
-    Venmo,
+    NetWorth,
+    Subscription,
+)
+from src.managers.source_manager.domain import (
+    User as DomainUser,
+    GroceriesExpense,
+    Income as DomainIncome,
+    Investment as DomainInvestment,
+    InvestmentType as DomainInvestmentType,
+    NetWorth as DomainNetWorth,
+    SinkingFund as DomainSinkingFund,
+    SinkingFundType as DomainSinkingFundType,
+    SubscriptionExpense as DomainSubscriptionExpense,
 )
 from src.security import hash_password
 
 
-def map_entity_to_domain_apartment_spending(
-    record: ApartmentSpendingTable,
-) -> ApartmentExpense:
+def map_domain_to_entity_groceries(expense: GroceriesExpense) -> Expense:
     """
-    Convert an ``ApartmentSpendingTable`` row into a domain ``ApartmentExpense``.
-
-    Args:
-        record (ApartmentSpendingTable): Database entity to convert.
-
-    Returns:
-        expense (ApartmentExpense): Domain object created from the row.
-    """
-    return ApartmentExpense(
-        date=record.Date,
-        amount=record.Amount,
-        description=record.Description,
-    )
-
-
-def map_domain_to_entity_apartment_spending(
-    expense: ApartmentExpense,
-) -> ApartmentSpendingTable:
-    """
-    Convert a domain ``ApartmentExpense`` into its ORM representation.
-
-    Args:
-        expense (ApartmentExpense): Domain model to convert.
-
-    Returns:
-        record (ApartmentSpendingTable): ORM entity ready for persistence.
-    """
-    return ApartmentSpendingTable(
-        Date=expense.date,
-        Amount=expense.amount,
-        Description=expense.description,
-    )
-
-
-def map_entity_to_domain_car_expense(record: CarTable) -> CarExpense:
-    """
-    Convert a ``CarTable`` row into a domain ``CarExpense``.
-
-    Args:
-        record (CarTable): ORM record representing a car expense.
-
-    Returns:
-        expense (CarExpense): Domain model created from the record.
-    """
-    return CarExpense(
-        date=record.Date,
-        amount=record.Amount,
-        description=record.Description,
-    )
-
-
-def map_domain_to_entity_car_expense(expense: CarExpense) -> CarTable:
-    """
-    Convert a domain ``CarExpense`` into a ``CarTable`` row.
-
-    Args:
-        expense (CarExpense): Domain object to convert.
-
-    Returns:
-        record (CarTable): ORM entity populated from the domain object.
-    """
-    return CarTable(
-        Date=expense.date,
-        Amount=expense.amount,
-        Description=expense.description,
-    )
-
-
-def map_entity_to_domain_clothing_expense(record: ClothingTable) -> ClothingExpense:
-    """
-    Convert a ``ClothingTable`` row into a domain ``ClothingExpense``.
-
-    Args:
-        record (ClothingTable): ORM record for a clothing expense.
-
-    Returns:
-        expense (ClothingExpense): Domain object created from ``record``.
-    """
-    return ClothingExpense(
-        date=record.Date,
-        amount=record.Amount,
-        description=record.Description,
-    )
-
-
-def map_domain_to_entity_clothing_expense(expense: ClothingExpense) -> ClothingTable:
-    """
-    Convert a domain ``ClothingExpense`` to its database representation.
-
-    Args:
-        expense (ClothingExpense): Domain model to convert.
-
-    Returns:
-        record (ClothingTable): ORM entity built from ``expense``.
-    """
-    return ClothingTable(
-        Date=expense.date,
-        Amount=expense.amount,
-        Description=expense.description,
-    )
-
-
-def map_entity_to_domain_eating_out_expense(record: EatingOutTable) -> EatingOutExpense:
-    """
-    Convert an ``EatingOutTable`` row into a domain ``EatingOutExpense``.
-
-    Args:
-        record (EatingOutTable): ORM record for an eating out expense.
-
-    Returns:
-        expense (EatingOutExpense): Domain object derived from ``record``.
-    """
-    return EatingOutExpense(
-        date=record.Date,
-        place=record.Place,
-        amount=record.Amount,
-        description=record.Description,
-    )
-
-
-def map_domain_to_entity_eating_out_expense(
-    expense: EatingOutExpense,
-) -> EatingOutTable:
-    """
-    Convert a domain ``EatingOutExpense`` into an ``EatingOutTable`` row.
-
-    Args:
-        expense (EatingOutExpense): Domain object to convert.
-
-    Returns:
-        record (EatingOutTable): ORM entity populated from the domain object.
-    """
-    return EatingOutTable(
-        Date=expense.date,
-        Place=expense.place,
-        Amount=expense.amount,
-        Description=expense.description,
-    )
-
-
-def map_entity_to_domain_gift_expense(record: GiftTable) -> GiftExpense:
-    """
-    Convert a ``GiftTable`` row into a domain ``GiftExpense``.
-
-    Args:
-        record (GiftTable): ORM entity representing a gift expense.
-
-    Returns:
-        expense (GiftExpense): Domain object created from ``record``.
-    """
-    return GiftExpense(
-        date=record.Date,
-        amount=record.Amount,
-        description=record.Description,
-    )
-
-
-def map_domain_to_entity_gift_expense(expense: GiftExpense) -> GiftTable:
-    """
-    Convert a domain ``GiftExpense`` into a ``GiftTable`` record.
-
-    Args:
-        expense (GiftExpense): Domain model to convert.
-
-    Returns:
-        record (GiftTable): ORM entity corresponding to the gift expense.
-    """
-    return GiftTable(
-        Date=expense.date,
-        Amount=expense.amount,
-        Description=expense.description,
-    )
-
-
-def map_entity_to_domain_groceries(record: GroceriesTable) -> GroceriesExpense:
-    """
-    Convert a ``GroceriesTable`` row into a domain ``GroceriesExpense``.
-
-    Args:
-        record (GroceriesTable): ORM record representing grocery spending.
-
-    Returns:
-        expense (GroceriesExpense): Domain model derived from ``record``.
-    """
-    return GroceriesExpense(
-        date=record.Date,
-        amount=record.Amount,
-        description=record.Description,
-    )
-
-
-def map_domain_to_entity_groceries(expense: GroceriesExpense) -> GroceriesTable:
-    """
-    Convert a ``GroceriesExpense`` domain object into a ``GroceriesTable`` row.
+    Convert a domain ``GroceriesExpense`` into an ``Expense`` entity.
 
     Args:
         expense (GroceriesExpense): Domain object to convert.
 
     Returns:
-        record (GroceriesTable): ORM entity created from ``expense``.
+        record (Expense): ORM entity created from ``expense``.
     """
-    return GroceriesTable(
-        Date=expense.date,
-        Amount=expense.amount,
-        Description=expense.description,
+    # TODO: Need to get or create a "Groceries" category first
+    return Expense(
+        amount=expense.amount,
+        description=expense.description,
+        date=expense.date,
+        # category_id will need to be set when category system is implemented
     )
 
 
-def map_entity_to_domain_income(record: IncomeTable) -> Income:
+def map_entity_to_domain_groceries(record: Expense) -> GroceriesExpense:
     """
-    Convert an ``IncomeTable`` row into the ``Income`` domain model.
+    Convert an ``Expense`` row into a domain ``GroceriesExpense``.
 
     Args:
-        record (IncomeTable): ORM record representing income.
+        record (Expense): ORM record representing grocery spending.
 
     Returns:
-        income (Income): Domain object built from the record.
+        expense (GroceriesExpense): Domain model derived from ``record``.
     """
-    return Income(
-        date=record.Date,
-        source=record.Source,
-        gross_pay=record.GrossPay,
-        taxes=record.Taxes,
+    return GroceriesExpense(
+        date=record.date,
+        amount=record.amount,
+        description=record.description,
     )
 
 
-def map_domain_to_entity_income(income: Income) -> IncomeTable:
-    """
-    Convert a domain ``Income`` instance into an ``IncomeTable`` row.
-
-    Args:
-        income (Income): Domain model to convert.
-
-    Returns:
-        record (IncomeTable): ORM entity created from ``income``.
-    """
-    net_pay = income.gross_pay - (income.taxes or 0)
-    return IncomeTable(
-        Date=income.date,
-        Source=income.source,
-        GrossPay=income.gross_pay,
-        Taxes=income.taxes,
-        NetPay=net_pay,
-    )
-
-
-def map_entity_to_domain_investment(record: InvestmentsTable) -> Investment:
-    """
-    Convert an ``InvestmentsTable`` row into a domain ``Investment``.
-
-    Args:
-        record (InvestmentsTable): ORM investment record.
-
-    Returns:
-        investment (Investment): Domain object created from the record.
-    """
-    return Investment(
-        fk_investment_type=record.FKInvestmentType,
-    )
-
-
-def map_domain_to_entity_investment(investment: Investment) -> InvestmentsTable:
-    """
-    Convert a domain ``Investment`` into an ``InvestmentsTable`` record.
-
-    Args:
-        investment (Investment): Domain model describing an investment.
-
-    Returns:
-        record (InvestmentsTable): ORM entity built from the domain data.
-    """
-    return InvestmentsTable(
-        FKInvestmentType=investment.fk_investment_type,
-    )
-
-
-def map_entity_to_domain_investment_type(record: InvestmentTypeTable) -> InvestmentType:
-    """
-    Convert an ``InvestmentTypeTable`` row into the ``InvestmentType`` domain model.
-
-    Args:
-        record (InvestmentTypeTable): ORM record describing an investment type.
-
-    Returns:
-        investment_type (InvestmentType): Domain object derived from ``record``.
-    """
-    return InvestmentType(
-        investment_type=record.InvestmentType,
-    )
-
-
-def map_domain_to_entity_investment_type(
-    investment_type: InvestmentType,
-) -> InvestmentTypeTable:
-    """
-    Convert a domain ``InvestmentType`` into an ``InvestmentTypeTable`` row.
-
-    Args:
-        investment_type (InvestmentType): Domain investment type model.
-
-    Returns:
-        record (InvestmentTypeTable): ORM entity created from ``investment_type``.
-    """
-    return InvestmentTypeTable(
-        InvestmentType=investment_type.investment_type,
-    )
-
-
-def map_entity_to_domain_misc_expense(record: MiscExpenseTable) -> MiscExpense:
-    """
-    Convert a ``MiscExpenseTable`` row into a domain ``MiscExpense``.
-
-    Args:
-        record (MiscExpenseTable): ORM record for miscellaneous expenses.
-
-    Returns:
-        expense (MiscExpense): Domain object derived from ``record``.
-    """
-    return MiscExpense(
-        date=record.Date,
-        amount=record.Amount,
-        description=record.Description,
-    )
-
-
-def map_domain_to_entity_misc_expense(expense: MiscExpense) -> MiscExpenseTable:
-    """
-    Convert a domain ``MiscExpense`` into a ``MiscExpenseTable`` record.
-
-    Args:
-        expense (MiscExpense): Domain model describing the expense.
-
-    Returns:
-        record (MiscExpenseTable): ORM entity built from ``expense``.
-    """
-    return MiscExpenseTable(
-        Date=expense.date,
-        Amount=expense.amount,
-        Description=expense.description,
-    )
-
-
-def map_entity_to_domain_net_worth(record: NetWorthTable) -> NetWorth:
-    """
-    Convert a ``NetWorthTable`` row into the ``NetWorth`` domain model.
-
-    Args:
-        record (NetWorthTable): ORM row for net worth.
-
-    Returns:
-        net_worth (NetWorth): Domain object created from ``record``.
-    """
-    return NetWorth(
-        date=record.Date,
-        net_worth=record.NetWorth,
-    )
-
-
-def map_domain_to_entity_user(user: User) -> UserTable:
+def map_domain_to_entity_user(user: DomainUser) -> User:
     """
     Maps domain user to new user table.
 
     Args:
-        user (CreateUser): domain model of a user
+        user (DomainUser): domain model of a user
     """
-    return UserTable(
-        Username=user.username,
-        Password=user.password,
-        FirstName=user.first_name,
-        LastName=user.last_name,
-        Email=user.email
+    return User(
+        username=user.username,
+        password_hash=hash_password(user.password),
+        first_name=user.first_name,
+        last_name=user.last_name,
+        email=user.email,
     )
 
 
-def map_entity_to_domain_user(record: UserTable) -> UserTable:
+def map_entity_to_domain_user(record: User) -> DomainUser:
     """
     Maps user from table to domain object
 
     Args:
-        record (UserTable): Entity object of the user
+        record (User): Entity object of the user
     """
-    return User(
-        username=record.Username,
-        password=record.Password,
-        first_name=record.FirstName,
-        last_name=record.LastName,
-        email=record.Email
+    return DomainUser(
+        username=record.username,
+        password=record.password_hash,  # Note: returning hash, not plain text
+        first_name=record.first_name,
+        last_name=record.last_name,
+        email=record.email,
     )
 
 
-def map_domain_to_entity_net_worth(net_worth: NetWorth) -> NetWorthTable:
+def map_domain_to_entity_income(income: DomainIncome) -> Income:
     """
-    Convert a domain ``NetWorth`` into a ``NetWorthTable`` record.
+    Convert a domain ``Income`` instance into an ``Income`` entity.
 
     Args:
-        net_worth (NetWorth): Domain model containing net worth data.
+        income (DomainIncome): Domain model to convert.
 
     Returns:
-        record (NetWorthTable): ORM entity built from ``net_worth``.
+        record (Income): ORM entity created from ``income``.
     """
-    return NetWorthTable(
-        Date=net_worth.date,
-        NetWorth=net_worth.net_worth,
+    return Income(
+        date=income.date,
+        amount=income.gross_pay,
+        description=f"Source: {income.source}",
+        # user_id and category_id will need to be set when implementing
     )
 
 
-def map_entity_to_domain_sinking_fund(record: SinkingFundTable) -> SinkingFund:
+def map_entity_to_domain_income(record: Income) -> DomainIncome:
     """
-    Convert a ``SinkingFundTable`` row into a ``SinkingFund`` domain object.
+    Convert an ``Income`` row into the ``Income`` domain model.
 
     Args:
-        record (SinkingFundTable): ORM record for a sinking fund entry.
+        record (Income): ORM record representing income.
 
     Returns:
-        fund (SinkingFund): Domain model created from ``record``.
+        income (DomainIncome): Domain object built from the record.
+    """
+    # TODO: Parse source from description when category system is implemented
+    return DomainIncome(
+        date=record.date,
+        source="Unknown",  # Will need to parse from description or category
+        gross_pay=record.amount,
+        taxes=0,  # Not stored in new schema
+    )
+
+
+def map_domain_to_entity_investment(investment: DomainInvestment) -> Investment:
+    """
+    Convert a domain ``Investment`` into an ``Investment`` entity.
+
+    Args:
+        investment (DomainInvestment): Domain model describing an investment.
+
+    Returns:
+        record (Investment): ORM entity built from the domain data.
+    """
+    # TODO: Implement when investment system is set up
+    pass
+
+
+def map_entity_to_domain_investment(record: Investment) -> DomainInvestment:
+    """
+    Convert an ``Investment`` row into a domain ``Investment``.
+
+    Args:
+        record (Investment): ORM investment record.
+
+    Returns:
+        investment (DomainInvestment): Domain object created from the record.
+    """
+    # TODO: Implement when investment system is set up
+    pass
+
+
+def map_domain_to_entity_investment_type(
+    investment_type: DomainInvestmentType,
+) -> InvestmentType:
+    """
+    Convert a domain ``InvestmentType`` into an ``InvestmentType`` entity.
+
+    Args:
+        investment_type (DomainInvestmentType): Domain investment type model.
+
+    Returns:
+        record (InvestmentType): ORM entity created from ``investment_type``.
+    """
+    return InvestmentType(
+        name=investment_type.investment_type,
+        type="investment",
+    )
+
+
+def map_entity_to_domain_investment_type(
+    record: InvestmentType,
+) -> DomainInvestmentType:
+    """
+    Convert an ``InvestmentType`` row into the ``InvestmentType`` domain model.
+
+    Args:
+        record (InvestmentType): ORM record describing an investment type.
+
+    Returns:
+        investment_type (DomainInvestmentType): Domain object derived from ``record``.
+    """
+    return DomainInvestmentType(
+        investment_type=record.name,
+    )
+
+
+def map_domain_to_entity_net_worth(net_worth: DomainNetWorth) -> NetWorth:
+    """
+    Convert a domain ``NetWorth`` into a ``NetWorth`` entity.
+
+    Args:
+        net_worth (DomainNetWorth): Domain model containing net worth data.
+
+    Returns:
+        record (NetWorth): ORM entity built from ``net_worth``.
+    """
+    return NetWorth(
+        date=net_worth.date,
+        amount=net_worth.net_worth,
+        # user_id will need to be set when implementing
+    )
+
+
+def map_entity_to_domain_net_worth(record: NetWorth) -> DomainNetWorth:
+    """
+    Convert a ``NetWorth`` row into the ``NetWorth`` domain model.
+
+    Args:
+        record (NetWorth): ORM row for net worth.
+
+    Returns:
+        net_worth (DomainNetWorth): Domain object created from ``record``.
+    """
+    return DomainNetWorth(
+        date=record.date,
+        net_worth=record.amount,
+    )
+
+
+def map_domain_to_entity_sinking_fund(fund: DomainSinkingFund) -> SinkingFund:
+    """
+    Convert a domain ``SinkingFund`` domain object into a ``SinkingFund`` entity.
+
+    Args:
+        fund (DomainSinkingFund): Domain sinking fund instance to convert.
+
+    Returns:
+        record (SinkingFund): ORM entity built from ``fund``.
     """
     return SinkingFund(
-        amount=record.Amount,
-        fk_sinking_fund_type=record.FKSinkingFundType,
-        date=record.Date,
+        amount=fund.amount,
+        date=fund.date,
+        # user_id and category_id will need to be set when implementing
     )
 
 
-def map_domain_to_entity_sinking_fund(fund: SinkingFund) -> SinkingFundTable:
+def map_entity_to_domain_sinking_fund(record: SinkingFund) -> DomainSinkingFund:
     """
-    Convert a ``SinkingFund`` domain object into a ``SinkingFundTable`` row.
+    Convert a ``SinkingFund`` row into a ``SinkingFund`` domain object.
 
     Args:
-        fund (SinkingFund): Domain sinking fund instance to convert.
+        record (SinkingFund): ORM record for a sinking fund entry.
 
     Returns:
-        record (SinkingFundTable): ORM entity built from ``fund``.
+        fund (DomainSinkingFund): Domain model created from ``record``.
     """
-    return SinkingFundTable(
-        Amount=fund.amount,
-        FKSinkingFundType=fund.fk_sinking_fund_type,
-        Date=fund.date,
-    )
-
-
-def map_entity_to_domain_sinking_fund_type(
-    record: SinkingFundTypeTable,
-) -> SinkingFundType:
-    """
-    Convert a ``SinkingFundTypeTable`` row into a ``SinkingFundType`` domain model.
-
-    Args:
-        record (SinkingFundTypeTable): ORM record for a sinking fund type.
-
-    Returns:
-        fund_type (SinkingFundType): Domain object derived from ``record``.
-    """
-    return SinkingFundType(
-        fund_type=record.FundType,
-        total=record.Total,
+    return DomainSinkingFund(
+        amount=record.amount,
+        fk_sinking_fund_type=0,  # TODO: Implement when category system is set up
+        date=record.date,
     )
 
 
 def map_domain_to_entity_sinking_fund_type(
-    fund_type: SinkingFundType,
-) -> SinkingFundTypeTable:
+    fund_type: DomainSinkingFundType,
+) -> SinkingFundType:
     """
-    Convert a ``SinkingFundType`` domain object into a ``SinkingFundTypeTable`` row.
+    Convert a domain ``SinkingFundType`` domain object into a ``SinkingFundType`` entity.
 
     Args:
-        fund_type (SinkingFundType): Domain fund type to convert.
+        fund_type (DomainSinkingFundType): Domain fund type to convert.
 
     Returns:
-        record (SinkingFundTypeTable): ORM entity created from ``fund_type``.
+        record (SinkingFundType): ORM entity created from ``fund_type``.
     """
-    return SinkingFundTypeTable(
-        FundType=fund_type.fund_type,
-        Total=fund_type.total,
+    return SinkingFundType(
+        name=fund_type.fund_type,
+        type="sinking_fund",
+        total=fund_type.total,
     )
 
 
-def map_entity_to_domain_subscription_expense(
-    record: SubscriptionTable,
-) -> SubscriptionExpense:
+def map_entity_to_domain_sinking_fund_type(
+    record: SinkingFundType,
+) -> DomainSinkingFundType:
     """
-    Convert a ``SubscriptionTable`` row into a domain ``SubscriptionExpense``.
+    Convert a ``SinkingFundType`` row into a ``SinkingFundType`` domain model.
 
     Args:
-        record (SubscriptionTable): ORM record for subscription spending.
+        record (SinkingFundType): ORM record for a sinking fund type.
 
     Returns:
-        expense (SubscriptionExpense): Domain object created from ``record``.
+        fund_type (DomainSinkingFundType): Domain object derived from ``record``.
     """
-    return SubscriptionExpense(
-        date=record.Date,
-        amount=record.Amount,
-        description=record.Description,
+    return DomainSinkingFundType(
+        fund_type=record.name,
+        total=record.total,
     )
 
 
 def map_domain_to_entity_subscription_expense(
-    expense: SubscriptionExpense,
-) -> SubscriptionTable:
+    expense: DomainSubscriptionExpense,
+) -> Subscription:
     """
-    Convert a domain ``SubscriptionExpense`` into a ``SubscriptionTable`` record.
+    Convert a domain ``SubscriptionExpense`` into a ``Subscription`` entity.
 
     Args:
-        expense (SubscriptionExpense): Domain subscription expense.
+        expense (DomainSubscriptionExpense): Domain subscription expense.
 
     Returns:
-        record (SubscriptionTable): ORM entity created from ``expense``.
+        record (Subscription): ORM entity created from ``expense``.
     """
-    return SubscriptionTable(
-        Date=expense.date,
-        Amount=expense.amount,
-        Description=expense.description,
+    return Subscription(
+        name=expense.description or "Subscription",
+        amount=expense.amount,
+        frequency="monthly",  # Default to monthly, can be made configurable
+        start_date=expense.date,
+        # user_id and category_id will need to be set when implementing
     )
 
 
-def map_entity_to_domain_venmo(record: VenmoTable) -> Venmo:
+def map_entity_to_domain_subscription_expense(
+    record: Subscription,
+) -> DomainSubscriptionExpense:
     """
-    Convert a ``VenmoTable`` row into a domain ``Venmo`` record.
+    Convert a ``Subscription`` row into a domain ``SubscriptionExpense``.
 
     Args:
-        record (VenmoTable): ORM record representing a Venmo transaction.
+        record (Subscription): ORM record for subscription spending.
 
     Returns:
-        venmo (Venmo): Domain object built from ``record``.
+        expense (DomainSubscriptionExpense): Domain object created from ``record``.
     """
-    return Venmo(
-        date=record.Date,
-        amount=record.Amount,
-        description=record.Description,
-    )
-
-
-def map_domain_to_entity_venmo(venmo: Venmo) -> VenmoTable:
-    """
-    Convert a domain ``Venmo`` object into a ``VenmoTable`` row.
-
-    Args:
-        venmo (Venmo): Domain transaction data to convert.
-
-    Returns:
-        record (VenmoTable): ORM entity created from ``venmo``.
-    """
-    return VenmoTable(
-        Date=venmo.date,
-        Amount=venmo.amount,
-        Description=venmo.description,
-    )
-
-
-def map_entity_to_domain_login(record: UserTable) -> Login:
-    """Convert a ``UserTable`` row into a ``Login`` domain object."""
-
-    return Login(
-        username=record.Username,
-        password=record.Password,
-    )
-
-
-def map_domain_to_entity_login(login: Login) -> UserTable:
-    """Convert a ``Login`` domain object into a ``UserTable`` row."""
-
-    return UserTable(
-        Username=login.username,
-        Password=hash_password(login.password),
+    return DomainSubscriptionExpense(
+        date=record.start_date,
+        amount=record.amount,
+        description=record.name,
     )

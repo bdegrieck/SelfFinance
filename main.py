@@ -14,14 +14,17 @@ from src.database.entrypoint import create_db, clear_database
 load_dotenv()
 
 # check if mac
-if platform.system() == "Darwin":
+system = platform.system()
+if system == "Darwin":
     PG_CTL = os.getenv("POSTGRES_ROOT_PATH_MAC")
     PG_DATA = os.getenv("POSTGRES_DATA_DIRECTORY_MAC")
 
 # check if windows
-elif platform.system() == "Windows":
+elif system == "Windows":
     PG_CTL = os.getenv("POSTGRES_ROOT_PATH")
     PG_DATA = os.getenv("POSTGRES_DATA_DIRECTORY")
+
+npm_command = "npm.cmd" if system == "Windows" else "npm"
 
 
 @click.group()
@@ -160,49 +163,47 @@ def cli_start_app(ctx):
     ctx.invoke(cli_start_postgres)
     app_dir = os.path.join(os.path.dirname(__file__), "app")
 
-    api_proc = subprocess.Popen(
-        [
-            "uvicorn",
-            "src.api.main:app",
-            "--reload",
-        ]
-    )
-    react_proc = subprocess.Popen(["npm.cmd", "run", "dev"], cwd=app_dir)
+    # Start React in background
+    react_proc = subprocess.Popen([npm_command, "run", "dev"], cwd=app_dir)
 
+    # Start API using uvicorn.run() instead of subprocess
     try:
-        react_proc.wait()
-    finally:
-        api_proc.terminate()
-        react_proc.terminate()
-        api_proc.wait(timeout=5)
+        import uvicorn
 
+        uvicorn.run(
+            "src.api.main:app", host="0.0.0.0", port=8000, reload=True, log_level="info"
+        )
+    finally:
+        react_proc.terminate()
+        react_proc.wait(timeout=5)
 
 
 @cli.command(name="debug-app")
 @click.pass_context
-def cli_start_app(ctx):
+def cli_debug_app(ctx):
     # Restart Postgres as you already have
     ctx.invoke(cli_stop_postgres)
     ctx.invoke(cli_start_postgres)
 
-    # Start React the same way
+    # Start React in background
     app_dir = os.path.join(os.path.dirname(__file__), "app")
     react_proc = subprocess.Popen(
-        ["npm.cmd", "run", "dev"],
+        [npm_command, "run", "dev"],
         cwd=app_dir,
         shell=False,
     )
 
-    uvicorn.run(
-        app,  
-        host="0.0.0.0",
-        port=8000,
-        reload=False,    
-        log_level="debug"       
-    )
-
+    # Start API in debug mode
     try:
-        react_proc.wait()
+        import uvicorn
+
+        uvicorn.run(
+            "src.api.main:app",
+            host="0.0.0.0",
+            port=8000,
+            reload=False,
+            log_level="debug",
+        )
     finally:
         react_proc.terminate()
         react_proc.wait(timeout=5)

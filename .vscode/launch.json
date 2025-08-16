@@ -1,39 +1,42 @@
 {
     "version": "0.2.0",
     "configurations": [
-
-    
+  
       {
         "name": "Start App (Click)",
         "type": "debugpy",
         "request": "launch",
         "program": "${workspaceFolder}/main.py",
         "console": "integratedTerminal",
-        "args": ["start-app"]
+        "args": ["start-app"],
+        "python": "${command:python.interpreterPath}"
       },
       {
         "name": "Start Postgres (Click)",
-        "type": "python",
+        "type": "debugpy",
         "request": "launch",
         "program": "${workspaceFolder}/main.py",
         "console": "integratedTerminal",
-        "args": ["start-postgres"]
+        "args": ["start-postgres"],
+        "python": "${command:python.interpreterPath}"
       },
       {
         "name": "Stop Postgres (Click)",
-        "type": "python",
+        "type": "debugpy",
         "request": "launch",
         "program": "${workspaceFolder}/main.py",
         "console": "integratedTerminal",
-        "args": ["stop-postgres"]
+        "args": ["stop-postgres"],
+        "python": "${command:python.interpreterPath}"
       },
       {
         "name": "Debug App (Click)",
-        "type": "python",
+        "type": "debugpy",
         "request": "launch",
         "program": "${workspaceFolder}/main.py",
         "console": "integratedTerminal",
-        "args": ["debug-app"]
+        "args": ["debug-app"],
+        "python": "${command:python.interpreterPath}"
       }
     ]
   }
