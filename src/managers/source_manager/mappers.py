@@ -1,24 +1,20 @@
 from src.database.database import (
     User,
     Expense,
-    Category,
     Income,
     Investment,
-    InvestmentType,
     SinkingFund,
-    SinkingFundType,
     NetWorth,
     Subscription,
 )
 from src.managers.source_manager.domain import (
     User as DomainUser,
+    Expense as DomainExpense,
     GroceriesExpense,
     Income as DomainIncome,
     Investment as DomainInvestment,
-    InvestmentType as DomainInvestmentType,
     NetWorth as DomainNetWorth,
     SinkingFund as DomainSinkingFund,
-    SinkingFundType as DomainSinkingFundType,
     SubscriptionExpense as DomainSubscriptionExpense,
 )
 from src.security import hash_password
@@ -34,12 +30,12 @@ def map_domain_to_entity_groceries(expense: GroceriesExpense) -> Expense:
     Returns:
         record (Expense): ORM entity created from ``expense``.
     """
-    # TODO: Need to get or create a "Groceries" category first
     return Expense(
-        amount=expense.amount,
-        description=expense.description,
-        date=expense.date,
-        # category_id will need to be set when category system is implemented
+        Category="Groceries",  # Set category directly as string
+        Amount=expense.amount,
+        Description=expense.description,
+        Date=expense.date,
+        # UserId will need to be set when implementing
     )
 
 
@@ -54,9 +50,58 @@ def map_entity_to_domain_groceries(record: Expense) -> GroceriesExpense:
         expense (GroceriesExpense): Domain model derived from ``record``.
     """
     return GroceriesExpense(
-        date=record.date,
-        amount=record.amount,
-        description=record.description,
+        date=record.Date,
+        amount=record.Amount,
+        description=record.Description,
+    )
+
+
+def map_entity_to_domain_expenses(records: list[Expense]) -> list[DomainExpense]:
+    """
+    Convert a list of ``Expense`` rows into a list of domain ``Expense`` objects.
+    """
+    return [map_entity_to_domain_expense(record) for record in records]
+
+
+def map_domain_to_entity_expense(expense: DomainExpense) -> Expense:
+    """
+    Convert a domain ``Expense`` into an ``Expense`` entity.
+
+    Args:
+        expense (DomainExpense): Domain object to convert.
+
+    Returns:
+        record (Expense): ORM entity created from ``expense``.
+    """
+    return Expense(
+        Id=expense.id,
+        UserId=expense.user_id,
+        Category=expense.category,
+        Amount=expense.amount,
+        Description=expense.description,
+        Date=expense.date,
+        Place=expense.place,
+    )
+
+
+def map_entity_to_domain_expense(record: Expense) -> DomainExpense:
+    """
+    Convert an ``Expense`` row into a domain ``Expense``.
+
+    Args:
+        record (Expense): ORM record representing an expense.
+
+    Returns:
+        expense (DomainExpense): Domain model derived from ``record``.
+    """
+    return DomainExpense(
+        id=record.Id,
+        user_id=record.UserId,
+        category=record.Category,
+        amount=record.Amount,
+        description=record.Description,
+        date=record.Date,
+        place=record.Place,
     )
 
 
@@ -68,11 +113,11 @@ def map_domain_to_entity_user(user: DomainUser) -> User:
         user (DomainUser): domain model of a user
     """
     return User(
-        username=user.username,
-        password_hash=hash_password(user.password),
-        first_name=user.first_name,
-        last_name=user.last_name,
-        email=user.email,
+        Username=user.username,
+        PasswordHash=hash_password(user.password),
+        FirstName=user.first_name,
+        LastName=user.last_name,
+        Email=user.email,
     )
 
 
@@ -84,11 +129,11 @@ def map_entity_to_domain_user(record: User) -> DomainUser:
         record (User): Entity object of the user
     """
     return DomainUser(
-        username=record.username,
-        password=record.password_hash,  # Note: returning hash, not plain text
-        first_name=record.first_name,
-        last_name=record.last_name,
-        email=record.email,
+        username=record.Username,
+        password=record.PasswordHash,  # Note: returning hash, not plain text
+        first_name=record.FirstName,
+        last_name=record.LastName,
+        email=record.Email,
     )
 
 
@@ -103,10 +148,11 @@ def map_domain_to_entity_income(income: DomainIncome) -> Income:
         record (Income): ORM entity created from ``income``.
     """
     return Income(
-        date=income.date,
-        amount=income.gross_pay,
-        description=f"Source: {income.source}",
-        # user_id and category_id will need to be set when implementing
+        Date=income.date,
+        Category=income.source,  # Use source as category
+        Amount=income.gross_pay,
+        Description=f"Source: {income.source}",
+        # UserId will need to be set when implementing
     )
 
 
@@ -122,9 +168,9 @@ def map_entity_to_domain_income(record: Income) -> DomainIncome:
     """
     # TODO: Parse source from description when category system is implemented
     return DomainIncome(
-        date=record.date,
-        source="Unknown",  # Will need to parse from description or category
-        gross_pay=record.amount,
+        date=record.Date,
+        source=record.Category,  # Category field now contains the source
+        gross_pay=record.Amount,
         taxes=0,  # Not stored in new schema
     )
 
@@ -157,41 +203,6 @@ def map_entity_to_domain_investment(record: Investment) -> DomainInvestment:
     pass
 
 
-def map_domain_to_entity_investment_type(
-    investment_type: DomainInvestmentType,
-) -> InvestmentType:
-    """
-    Convert a domain ``InvestmentType`` into an ``InvestmentType`` entity.
-
-    Args:
-        investment_type (DomainInvestmentType): Domain investment type model.
-
-    Returns:
-        record (InvestmentType): ORM entity created from ``investment_type``.
-    """
-    return InvestmentType(
-        name=investment_type.investment_type,
-        type="investment",
-    )
-
-
-def map_entity_to_domain_investment_type(
-    record: InvestmentType,
-) -> DomainInvestmentType:
-    """
-    Convert an ``InvestmentType`` row into the ``InvestmentType`` domain model.
-
-    Args:
-        record (InvestmentType): ORM record describing an investment type.
-
-    Returns:
-        investment_type (DomainInvestmentType): Domain object derived from ``record``.
-    """
-    return DomainInvestmentType(
-        investment_type=record.name,
-    )
-
-
 def map_domain_to_entity_net_worth(net_worth: DomainNetWorth) -> NetWorth:
     """
     Convert a domain ``NetWorth`` into a ``NetWorth`` entity.
@@ -203,9 +214,9 @@ def map_domain_to_entity_net_worth(net_worth: DomainNetWorth) -> NetWorth:
         record (NetWorth): ORM entity built from ``net_worth``.
     """
     return NetWorth(
-        date=net_worth.date,
-        amount=net_worth.net_worth,
-        # user_id will need to be set when implementing
+        Date=net_worth.date,
+        NetWorth=net_worth.net_worth,
+        # UserId will need to be set when implementing
     )
 
 
@@ -220,8 +231,8 @@ def map_entity_to_domain_net_worth(record: NetWorth) -> DomainNetWorth:
         net_worth (DomainNetWorth): Domain object created from ``record``.
     """
     return DomainNetWorth(
-        date=record.date,
-        net_worth=record.amount,
+        date=record.Date,
+        net_worth=record.NetWorth,
     )
 
 
@@ -236,9 +247,9 @@ def map_domain_to_entity_sinking_fund(fund: DomainSinkingFund) -> SinkingFund:
         record (SinkingFund): ORM entity built from ``fund``.
     """
     return SinkingFund(
-        amount=fund.amount,
-        date=fund.date,
-        # user_id and category_id will need to be set when implementing
+        Amount=fund.amount,
+        Date=fund.date,
+        # UserId will need to be set when implementing
     )
 
 
@@ -253,46 +264,9 @@ def map_entity_to_domain_sinking_fund(record: SinkingFund) -> DomainSinkingFund:
         fund (DomainSinkingFund): Domain model created from ``record``.
     """
     return DomainSinkingFund(
-        amount=record.amount,
+        amount=record.Amount,
         fk_sinking_fund_type=0,  # TODO: Implement when category system is set up
-        date=record.date,
-    )
-
-
-def map_domain_to_entity_sinking_fund_type(
-    fund_type: DomainSinkingFundType,
-) -> SinkingFundType:
-    """
-    Convert a domain ``SinkingFundType`` domain object into a ``SinkingFundType`` entity.
-
-    Args:
-        fund_type (DomainSinkingFundType): Domain fund type to convert.
-
-    Returns:
-        record (SinkingFundType): ORM entity created from ``fund_type``.
-    """
-    return SinkingFundType(
-        name=fund_type.fund_type,
-        type="sinking_fund",
-        total=fund_type.total,
-    )
-
-
-def map_entity_to_domain_sinking_fund_type(
-    record: SinkingFundType,
-) -> DomainSinkingFundType:
-    """
-    Convert a ``SinkingFundType`` row into a ``SinkingFundType`` domain model.
-
-    Args:
-        record (SinkingFundType): ORM record for a sinking fund type.
-
-    Returns:
-        fund_type (DomainSinkingFundType): Domain object derived from ``record``.
-    """
-    return DomainSinkingFundType(
-        fund_type=record.name,
-        total=record.total,
+        date=record.Date,
     )
 
 
@@ -309,11 +283,11 @@ def map_domain_to_entity_subscription_expense(
         record (Subscription): ORM entity created from ``expense``.
     """
     return Subscription(
-        name=expense.description or "Subscription",
-        amount=expense.amount,
-        frequency="monthly",  # Default to monthly, can be made configurable
-        start_date=expense.date,
-        # user_id and category_id will need to be set when implementing
+        Name=expense.description or "Subscription",
+        Amount=expense.amount,
+        Frequency="monthly",  # Default to monthly, can be made configurable
+        StartDate=expense.date,
+        # UserId will need to be set when implementing
     )
 
 
@@ -330,7 +304,7 @@ def map_entity_to_domain_subscription_expense(
         expense (DomainSubscriptionExpense): Domain object created from ``record``.
     """
     return DomainSubscriptionExpense(
-        date=record.start_date,
-        amount=record.amount,
-        description=record.name,
+        date=record.StartDate,
+        amount=record.Amount,
+        description=record.Name,
     )

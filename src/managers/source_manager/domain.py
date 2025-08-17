@@ -76,6 +76,28 @@ class EatingOutExpense(BaseModel):
     description: Optional[str] = None
 
 
+class Expense(BaseModel):
+    """
+    Unified expense record for all types of expenses.
+
+    id (int, optional): Database ID of the expense
+    user_id (int): ID of the user who made the expense
+    category (str): Category of the expense (e.g., "Groceries", "Transportation")
+    amount (float): Amount spent on the expense
+    description (str, optional): Additional details about the expense
+    date (datetime): Date when the expense occurred
+    place (str, optional): Location where the expense occurred
+    """
+
+    id: int
+    user_id: int
+    category: str
+    amount: float
+    description: Optional[str] = None
+    date: dt.datetime
+    place: Optional[str] = None
+
+
 class GiftExpense(BaseModel):
     """Gifts purchased for others.
 
@@ -245,6 +267,7 @@ class Venmo(BaseModel):
     description (str): Description of the record
 
     """
+
     date: dt.datetime
     amount: float
     description: str

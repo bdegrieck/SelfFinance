@@ -16,9 +16,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def read_root():
     return {"message": "SelfFinance API"}
+
 
 @app.post("/create-user")
 def UserResourcePost(new_user_info: CreateUser):
@@ -27,37 +29,38 @@ def UserResourcePost(new_user_info: CreateUser):
         # Get the stored login record for this username
         finance_service = create_selfFinance_service()
         finance_service.insert_new_user(new_user_info)
-        
+
         return {
             "status": "success",
             "data": None,
             "message": "User created successfully",
-            "status_code": HttpStatus.created
+            "status_code": HttpStatus.created,
         }
-        
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
 
 
-
 @app.post("/login-user")
 def UserResourcePost(login_info: Login):
     """Handle user login authentication."""
     finance_service = create_selfFinance_service()
-    login_user_info: User = finance_service.get_login_by_username(username=login_info.username)
+    login_user_info: User = finance_service.get_login_by_username(
+        username=login_info.username
+    )
 
     if login_user_info is None:
         raise HTTPException(
             status_code=HttpStatus.not_found,
-            detail=f"User not found for: {login_info.username}."
+            detail=f"User not found for: {login_info.username}.",
         )
 
     if login_user_info.password != login_info.password:
         raise HTTPException(
             status_code=HttpStatus.unauthorized,
-            detail=f"Could not authenticate user: {login_info.username} with invalid password."
+            detail=f"Could not authenticate user: {login_info.username} with invalid password.",
         )
 
     return {
@@ -69,13 +72,12 @@ def UserResourcePost(login_info: Login):
             "first_name": login_user_info.first_name,
         },
         "message": "Login successful",
-        "status_code": HttpStatus.ok
+        "status_code": HttpStatus.ok,
     }
 
 
 @app.get("/get-monthly-expenses")
-def get_monthly_expenses(date: dt.datetime):
+def get_monthly_expenses(date: dt.datetime, user_id: int):
     finance_service = create_selfFinance_service()
-    monthly_expenses = finance_service.get_monthly_expenses(date)
+    monthly_expenses = finance_service.get_monthly_expenses(date, user_id)
     return monthly_expenses
-

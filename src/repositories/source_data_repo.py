@@ -12,6 +12,7 @@ from src.managers.source_manager.domain import (
 )
 from src.managers.source_manager.mappers import (
     map_domain_to_entity_groceries,
+    map_entity_to_domain_expenses,
     map_entity_to_domain_groceries,
     map_domain_to_entity_user,
     map_entity_to_domain_user,
@@ -49,30 +50,36 @@ class SourceDataRepository:
         Returns:
             groceries (GroceriesExpense | None): Retrieved groceries expense if present.
         """
-        # TODO: Implement when category system is set up for groceries
-        # record = (
-        #     self._session.query(Expense)
-        #     .join(Category)
-        #     .where(Expense.date == date, Category.name == "Groceries")
-        #     .first()
-        # )
-        # if record:
-        #     groceries = map_entity_to_domain_groceries(record=record)
-        #     return groceries
-        pass
+        record = (
+            self._session.query(Expense)
+            .where(Expense.Category == "Groceries", Expense.Date == date)
+            .first()
+        )
+        if record:
+            groceries = map_entity_to_domain_groceries(record=record)
+            return groceries
+        return None
 
-    def get_monthly_expenses(self, date: dt.datetime):
+    def get_monthly_expenses(self, date: dt.datetime, user_id: int):
         """
         Fetch monthly expenses for a specific date.
 
         Args:
             date (datetime): Date to query.
+            user_id (int): User ID to filter expenses by.
 
         Returns:
             monthly_expenses: Retrieved monthly expenses if present.
         """
-        # TODO: Implement monthly expenses query when MonthlyExpensesTable is available
-        pass
+        record = (
+            self._session.query(Expense)
+            .where(Expense.Date == date)
+            .where(Expense.UserId == user_id)
+            .all()
+        )
+        if record:
+            return map_entity_to_domain_expenses(records=record)
+        return None
 
     def insert_new_user(self, user_info: User) -> None:
         """Insert a login record into the database."""
@@ -83,7 +90,7 @@ class SourceDataRepository:
         """Retrieve a login by username if present."""
 
         record = (
-            self._session.query(UserTable).where(UserTable.username == username).first()
+            self._session.query(UserTable).where(UserTable.Username == username).first()
         )
         if record:
             return map_entity_to_domain_user(record=record)
